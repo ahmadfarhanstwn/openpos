@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,10 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+//FOR TESTING PURPOSE
+Route::get('/test', function () {
+    return env('DB_HOST').' '.env('DB_PORT');
 });
 
-Route::get('/test', function () {
-    return 'Hello World';
+//auth
+Route::controller(AuthController::class)->group(function() {
+    Route::post('signin', 'signin');
+    Route::post('signup', 'signup');
+    Route::post('signout', 'signout');
+    Route::post('refresh', 'refresh');
 });
