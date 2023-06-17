@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  server:
+    container_name: server
+    build: ./server
+    volumes:
+      - ./server:/var/www/html
+    ports:
+      - 9000:80
+    env_file:
+      - ./server/.env
+  
+  mysql_db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+    ports:
+    - 3307:3307
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
