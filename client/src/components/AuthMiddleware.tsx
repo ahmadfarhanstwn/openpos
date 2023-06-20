@@ -11,9 +11,6 @@ interface IAuthMiddlewareProps {
 const AuthMiddleware:React.FC<IAuthMiddlewareProps> = ({allowedUser}) => {
     const {isAuthenticated, user} = useSelector((state: RootState) => state.userState);
 
-    console.log(isAuthenticated)
-    console.log(user)
-
     const location = useLocation()
 
     return (
