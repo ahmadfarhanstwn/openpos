@@ -4,6 +4,10 @@ import { themeSettings } from './theme';
 import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
+import Layout from './components/Layout';
+import DashboardPage from './pages/modules/Dashboard/DashboardPage';
+import UnauthorizePage from './pages/UnauthorizedPage';
+import AuthMiddleware from './components/AuthMiddleware';
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
@@ -17,6 +21,14 @@ function App() {
             <Route path="/" element={<Navigate to="/signin" replace />} />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/unauthorized" element={<UnauthorizePage />} />
+          </Routes>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route element={<AuthMiddleware allowedUser={['super_admin', 'management']} />}>
+                <Route path='/dashboard' element={<DashboardPage />} />
+              </Route>
+            </Route>
           </Routes>
         </ThemeProvider>  
       </BrowserRouter>
