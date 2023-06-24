@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Role;
+use App\Http\Requests\SignInRequest;
+use App\Http\Requests\SignUpRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Enum;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller
 {
@@ -16,57 +16,54 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['signin', 'signup']]);
     }
 
-    public function signin(Request $request)
+    public function signin(SignInRequest $request)
     {
-        $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string'
-        ]);
-
         $credentials = $request->only('username', 'password');
 
-        $token = Auth::attempt($credentials);
-        if(!$token) {
+        $user = User::where('username', $credentials['username'])->firstOrFail();
+
+        if(!Hash::check($credentials['password'], $user->password))
+        {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized'
-            ], 401);
+                'error' => 'Invalid Password'
+            ], 422);
         }
 
-        $user = Auth::user();
-        return response()->json([
-            'status' => 'success',
-            'user' => $user,
-            'authorization' => [
-                'token' => $token,
-                'type' => 'bearer'
-            ]
-        ]);
+        try {
+            $token = auth()->attempt($credentials);
+
+            return response()->json([
+                'message' => 'success',
+                'user' => $user,
+                'authorization' => [
+                    'token' => $token,
+                    'type' => 'bearer'
+                ]
+            ], 200);
+        } catch(JWTException $e) {
+            return response()->json([
+                'error' => 'Auth error'
+            ], 500);
+        }
     }
 
-    public function signup(Request $request)
+    public function signup(SignUpRequest $request)
     {
-        $request->validate([
-            'username' => 'required|string',
-            'email' => 'required|string|email',
-            'full_name' => 'required|string',
-            'password' => 'required|string',
-            'role' => 'in:super_admin,cashier,management',
-        ]);
+        $validatedRequest = $request->validated();
 
         $user = User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'full_name' => $request->full_name,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'username' => $validatedRequest['username'],
+            'email' => $validatedRequest['email'],
+            'full_name' => $validatedRequest['full_name'],
+            'password' => Hash::make($validatedRequest['password']),
+            'role' => $validatedRequest['role'],
         ]);
 
         return response()->json([
             'status' => 'success',
             'message' => 'User created succesfully',
             'user' => $user
-        ]);
+        ], 201);
     }
 
     public function signout()
