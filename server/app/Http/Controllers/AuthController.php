@@ -20,7 +20,13 @@ class AuthController extends Controller
     {
         $credentials = $request->only('username', 'password');
 
-        $user = User::where('username', $credentials['username'])->firstOrFail();
+        $user = User::where('username', $credentials['username'])->first();
+
+        if (!$user) {
+            return response()->json([
+                'error' => 'Username not found'
+            ], 422);
+        }
 
         if(!Hash::check($credentials['password'], $user->password))
         {
