@@ -7,8 +7,6 @@ use App\Domains\Products\Repository\IProductCategoryRepository;
 
 class ProductCategoryRepository implements IProductCategoryRepository
 {
-    public function __construct()
-    {}
 
     public function list()
     {
