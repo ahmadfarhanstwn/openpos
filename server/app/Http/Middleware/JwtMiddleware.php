@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Exception;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class JwtMiddleware
 {
@@ -16,6 +18,27 @@ class JwtMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        try {
+            $token = $request->header('Authorization');
+
+            error_log($token);
+
+            if (!$token) {
+                abort(401, 'Token not provided');
+            }
+
+            $user = auth()->user();
+
+            if(!$user) {
+                return response()->json(['error' => 'User not found'], 401);
+            }
+
+            $request->merge(['user' => $user]);
+        } catch(JWTException $e) {
+            return response()->json(['error' => 'Invalid token'], 401);
+        } catch(Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 401);
+        }
         return $next($request);
     }
 }

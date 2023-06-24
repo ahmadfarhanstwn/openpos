@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['signin', 'signup']]);
+        $this->middleware('jwt.auth', ['except' => ['signin', 'signup']]);
     }
 
     public function signin(SignInRequest $request)
