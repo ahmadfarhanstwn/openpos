@@ -3,6 +3,7 @@
 namespace App\Domains\Products\Service;
 
 use App\Domains\Products\Repository\IProductCategoryRepository;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductCategoryService
 {
@@ -11,26 +12,62 @@ class ProductCategoryService
 
     public function list()
     {
-        return $this->productCategoryRepository->list();
+        try {
+            $data = $this->productCategoryRepository->list();
+            return response()->json([
+                'message' => 'Success',
+                'data' => $data
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function productList($id)
     {
-        return $this->productCategoryRepository->productList($id);
+        try {
+            $data = $this->productCategoryRepository->productList($id);
+            return response()->json([
+                'message' => 'Success',
+                'data' => $data
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function store($data = array())
     {
-        return $this->productCategoryRepository->store($data);
+        $data = $this->productCategoryRepository->store($data);
+        return response()->json([
+            'message' => 'Success',
+            'data' => $data
+        ], Response::HTTP_CREATED);
     }
 
     public function update($id, $data = array())
     {
-        return $this->productCategoryRepository->update($id, $data);
+        try {
+            $data = $this->productCategoryRepository->update($id, $data);
+            return response()->json([
+                'message' => 'Success',
+                'data' => $data
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function destroyById($id)
     {
-        return $this->productCategoryRepository->destroyById($id);
+        try {
+            $data =  $this->productCategoryRepository->destroyById($id);
+            return response()->json([
+                'message' => 'Success',
+                'data' => $data
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
     }
 }

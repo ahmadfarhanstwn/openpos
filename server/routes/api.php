@@ -32,7 +32,7 @@ Route::controller(AuthController::class)->group(function() {
 
 Route::controller(ProductCategoryController::class)->group(function() {
     Route::get('category', 'index');
-    Route::get('category/products_list', 'productList');
+    Route::get('category/product_list/{id}', 'productList');
     Route::post('category', 'store');
     Route::put('category/{id}', 'update');
     Route::delete('category/{id}', 'delete');
