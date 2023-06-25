@@ -18,6 +18,8 @@ class Product extends Model
         'created_at'
     ];
 
+    protected $primaryKey = 'product_id';
+
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class, 'unit_id', 'unit_id');
