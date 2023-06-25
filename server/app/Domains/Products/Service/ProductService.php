@@ -50,11 +50,15 @@ class ProductService
 
     public function store($request = array(), int $userId)
     {
-        $data = $this->productRepository->store($request, $userId);
-        return response()->json([
-            'message' => 'Success',
-            'data' => $data
-        ], Response::HTTP_CREATED);
+        try {
+            $data = $this->productRepository->store($request, $userId);
+            return response()->json([
+                'message' => 'Success',
+                'data' => $data
+            ], Response::HTTP_CREATED);
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function update($request = array(), int $id)

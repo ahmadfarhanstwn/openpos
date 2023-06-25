@@ -4,6 +4,8 @@ namespace App\Domains\Products\Repository;
 
 use App\Models\ProductUnit;
 use App\Domains\Products\Repository\IProductUnitRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductUnitRepository implements IProductUnitRepository
 {
@@ -14,41 +16,47 @@ class ProductUnitRepository implements IProductUnitRepository
 
     public function getById(int $id)
     {
-        return ProductUnit::find($id);
+        try {
+            return ProductUnit::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            throw new \Exception('Product Unit not found', Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     public function store(array $data = array())
     {
         $productUnit = new ProductUnit;
-
         $productUnit->unit_name = $data['unit_name']; 
-
         $productUnit->save();
-
         return $productUnit;
     }
 
     public function update(int $id, array $data = array())
     {
-        $productUnit = ProductUnit::find($id);
-
-        if(!$productUnit) return $productUnit;
-
-        $productUnit->unit_name = $data['unit_name'];
-
-        $productUnit->save();
-
-        return $productUnit;
+        try {
+            $productUnit = ProductUnit::findOrFail($id);
+            $productUnit->unit_name = $data['unit_name'];
+            $productUnit->save();
+            return $productUnit;
+        } catch (ModelNotFoundException $e) {
+            throw new \Exception('Product Unit not found', Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     public function destroyById(int $id)
     {
-        $productUnit = ProductUnit::find($id);
-
-        if(!$productUnit) return $productUnit;
-
-        $productUnit->delete();
-
-        return $productUnit;
+        try {
+            $productUnit = ProductUnit::findOrFail($id);
+            $productUnit->delete();
+            return $productUnit;
+        } catch (ModelNotFoundException $e) {
+            throw new \Exception('Product Unit not found', Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

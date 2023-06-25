@@ -38,11 +38,15 @@ class ProductCategoryService
 
     public function store($data = array())
     {
-        $data = $this->productCategoryRepository->store($data);
-        return response()->json([
-            'message' => 'Success',
-            'data' => $data
-        ], Response::HTTP_CREATED);
+        try {
+            $data = $this->productCategoryRepository->store($data);
+            return response()->json([
+                'message' => 'Success',
+                'data' => $data
+            ], Response::HTTP_CREATED);
+        } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function update($id, $data = array())
