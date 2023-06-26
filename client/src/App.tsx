@@ -8,6 +8,7 @@ import Layout from './components/Layout';
 import DashboardPage from './pages/modules/Dashboard/DashboardPage';
 import UnauthorizePage from './pages/UnauthorizedPage';
 import AuthMiddleware from './components/AuthMiddleware';
+import ProductPage from './pages/modules/Products/ProductPage';
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
@@ -27,6 +28,7 @@ function App() {
             <Route element={<Layout />}>
               <Route element={<AuthMiddleware allowedUser={['super_admin', 'management']} />}>
                 <Route path='/dashboard' element={<DashboardPage />} />
+                <Route path='/products' element={<ProductPage />} />
               </Route>
             </Route>
           </Routes>

@@ -1,4 +1,4 @@
-import { HomeOutlined, ProductionQuantityLimitsOutlined, DeliveryDiningOutlined, ReceiptLongOutlined, ReportOffOutlined, SettingsAccessibilityOutlined } from "@mui/icons-material";
+import { HomeOutlined, ProductionQuantityLimitsOutlined, DeliveryDiningOutlined, ReceiptLongOutlined, ReportOffOutlined, SettingsAccessibilityOutlined, ShoppingBasket } from "@mui/icons-material";
 import { SvgIconProps } from "@mui/material";
 
 interface ISidebarValue {
@@ -14,6 +14,10 @@ export const SidebarValueLists: ISidebarValue[] = [
     {
         text: "Products",
         icon: <ProductionQuantityLimitsOutlined />
+    },
+    {
+        text: "Cashier",
+        icon: <ShoppingBasket />
     },
     {
         text: "Orders",

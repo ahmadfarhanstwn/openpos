@@ -2,8 +2,10 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { authApi } from './api/authApi';
 import userReducer from '../redux/features/userSlice'
+import productReducer from '../redux/features/productSlice'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist';
+import { productApi } from './api/productApi';
 
 const persistConfig = {
     key: 'root',
@@ -15,10 +17,12 @@ const persisteUserReducer = persistReducer(persistConfig, userReducer)
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
+        [productApi.reducerPath]: productApi.reducer,
         userState: persisteUserReducer,
+        productState: productReducer
     },
     devTools: process.env.NODE_ENV === 'development',
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware({}).concat([authApi.middleware])
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({}).concat([authApi.middleware, productApi.middleware])
 })
 
 export type RootState = ReturnType<typeof store.getState>;
