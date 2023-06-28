@@ -8,6 +8,7 @@ services:
     command: php artisan serve --host=0.0.0.0
     volumes:
       - ./server:/var/www/html
+      - /var/www/html/vendor
     env_file:
       - ./server/.env
     ports:
