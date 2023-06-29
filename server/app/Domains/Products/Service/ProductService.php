@@ -16,14 +16,14 @@ class ProductService
         $currentPage = $request->query('current_page', 1);
         if(!is_numeric($currentPage)) {
             return response()->json([
-                'message' => 'current_page should be numeric'
+                'error' => 'current_page should be numeric'
             ], Response::HTTP_BAD_REQUEST);
         }
 
         $perPage = $request->query('per_page', 10);
         if(!is_numeric($perPage)) {
             return response()->json([
-                'message' => 'per_page should be numeric'
+                'error' => 'per_page should be numeric'
             ], Response::HTTP_BAD_REQUEST);
         }
 
