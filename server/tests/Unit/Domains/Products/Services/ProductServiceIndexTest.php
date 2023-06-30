@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Unit\Domains\Products\Service;
+
 use App\Domains\Products\Repository\ProductRepository;
 use App\Domains\Products\Service\ProductService;
 use Illuminate\Http\Request;
@@ -14,12 +16,11 @@ class ProductServiceIndexTest extends TestCase
         Mockery::close();
     }
 
-    public function testIndexSuccess()
+    public function test_index_success()
     {
-        // create mock instance
+        // arrange
         $productRepositoryMock = Mockery::mock(ProductRepository::class);
 
-        //defined the expected params
         $currentPage = 1;
         $perPage = 10;
         $expectedData = [
@@ -53,6 +54,11 @@ class ProductServiceIndexTest extends TestCase
             "to"=> null,
             "total"=> 0
         ];
+
+        $expectedResponse = [
+            'message' => 'Success',
+            'data' => $expectedData
+        ];
         
         //mock index method
         $productRepositoryMock
@@ -73,23 +79,19 @@ class ProductServiceIndexTest extends TestCase
             ->with('per_page', 10)
             ->andReturn($perPage);
 
-        // Call the index method and assert the response
+        // act
         $response = $productService->index($request);
         
-        $expectedResponse = [
-            'message' => 'Success',
-            'data' => $expectedData
-        ];
-        
+        //assert
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals($expectedResponse, json_decode($response->getContent(), true));
     }
 
-    public function testIndexCurrentPageIsNotNumeric()
+    public function test_index_current_page_is_not_numeric()
     {
+        //arrange
         $currentPage = 'not_numeric';
 
-        // create mock instance
         $productRepositoryMock = Mockery::mock(ProductRepository::class);
 
         $request = Mockery::mock(Request::class);
@@ -100,23 +102,24 @@ class ProductServiceIndexTest extends TestCase
 
         $productService = new ProductService($productRepositoryMock);
 
-        // Call the index method and assert the response
-        $response = $productService->index($request);
-
         $expectedResponse = [
             'error' => 'current_page should be numeric'
         ];
 
+        // act
+        $response = $productService->index($request);
+
+        //assert
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $this->assertEquals($expectedResponse, json_decode($response->getContent(), true));
     }
 
-    public function testIndexPerPageIsNotNumeric()
+    public function test_index_per_page_is_not_numeric()
     {
+        //arrange
         $currentPage = 1;
         $perPage = 'not_numeric';
 
-        // create mock instance
         $productRepositoryMock = Mockery::mock(ProductRepository::class);
 
         $request = Mockery::mock(Request::class);
@@ -131,13 +134,14 @@ class ProductServiceIndexTest extends TestCase
 
         $productService = new ProductService($productRepositoryMock);
 
-        // Call the index method and assert the response
-        $response = $productService->index($request);
-
         $expectedResponse = [
             'error' => 'per_page should be numeric'
         ];
 
+        //act
+        $response = $productService->index($request);
+
+        //assert
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $this->assertEquals($expectedResponse, json_decode($response->getContent(), true));
     }
