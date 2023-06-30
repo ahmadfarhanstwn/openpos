@@ -8,16 +8,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProductRepository implements IProductRepository
 {
+    public function __construct(private Product $productModel)
+    {
+    }
+    
     public function index(int $currentPage, int $perPage)
     {
-        return Product::where('is_deleted', 'N')
+        return $this->productModel->where('is_deleted', 'N')
             ->paginate($perPage, ['*'], 'page', $currentPage);
     }
 
     public function getById(int $id)
     {
         try {
-            return Product::findOrFail($id);
+            return $this->productModel->findOrFail($id);
         } catch (ModelNotFoundException $e) {
             throw new \Exception('Product not found', Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
@@ -27,7 +31,7 @@ class ProductRepository implements IProductRepository
 
     public function store(array $request = array(), int $userId)
     {
-        $newProduct = new Product;
+        $newProduct = new $this->productModel;
         $newProduct->product_barcode = $request['product_barcode'];
         $newProduct->product_name = $request['product_name'];
         $newProduct->unit_id = $request['unit_id'];
@@ -45,7 +49,7 @@ class ProductRepository implements IProductRepository
     public function update(array $request = array(), int $id)
     {
         try {
-            $product = Product::findOrFail($id);
+            $product = $this->productModel->findOrFail($id);
             $product->product_barcode = $request['product_barcode'];
             $product->product_name = $request['product_name'];
             $product->unit_id = $request['unit_id'];
@@ -65,7 +69,7 @@ class ProductRepository implements IProductRepository
     public function increaseStock(int $id, int $amount)
     {
         try {
-            $product = Product::findOrFail($id);
+            $product = $this->productModel->findOrFail($id);
 
             $product->unit_in_stock += $amount;
             $product->save();
@@ -81,7 +85,7 @@ class ProductRepository implements IProductRepository
     public function decreaseStock(int $id, int $amount)
     {
         try {
-            $product = Product::findOrFail($id);
+            $product = $this->productModel->findOrFail($id);
 
             if ($product->unit_in_stock < $amount) {
                 throw new \Exception("Amount is greater than stock", Response::HTTP_BAD_REQUEST);
@@ -101,7 +105,7 @@ class ProductRepository implements IProductRepository
     public function deleteById(int $id)
     {
         try {
-            $product = Product::findOrFail($id);
+            $product = $this->productModel->findOrFail($id);
 
             $product->is_deleted = 'Y';
             $product->save();
