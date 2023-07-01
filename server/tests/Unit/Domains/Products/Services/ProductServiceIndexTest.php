@@ -16,7 +16,7 @@ class ProductServiceIndexTest extends TestCase
         Mockery::close();
     }
 
-    public function test_index_success()
+    public function test_index_success() : void
     {
         // arrange
         $productRepositoryMock = Mockery::mock(ProductRepository::class);
@@ -87,7 +87,7 @@ class ProductServiceIndexTest extends TestCase
         $this->assertEquals($expectedResponse, json_decode($response->getContent(), true));
     }
 
-    public function test_index_current_page_is_not_numeric()
+    public function test_index_current_page_is_not_numeric() : void
     {
         //arrange
         $currentPage = 'not_numeric';
