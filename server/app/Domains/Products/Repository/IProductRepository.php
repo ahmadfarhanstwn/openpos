@@ -2,6 +2,8 @@
 
 namespace App\Domains\Products\Repository;
 
+use App\Http\Requests\ProductStoreRequest;
+
 interface IProductRepository {
     public function index(int $currentPage, int $perPage);
     public function getById(int $id);

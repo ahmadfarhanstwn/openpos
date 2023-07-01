@@ -2,12 +2,14 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { IProduct } from '../../../../redux/api/types';
 
 const columns: GridColDef[] = [
-  { field: 'product_id', headerName: 'Product ID', width: 100 },
-  { field: 'product_barcode', headerName: 'Barcode', width: 150 },
-  { field: 'product_name', headerName: 'Name', width: 150 },
-  { field: 'unit_in_stock', headerName: 'Stock', width: 50 },
+  { field: 'product_id', headerName: 'Product ID' },
+  { field: 'product_barcode', headerName: 'Barcode', width: 200 },
+  { field: 'product_name', headerName: 'Name', width: 250 },
+  { field: 'unit_name', headerName: 'Unit', width: 50},
+  { field: 'unit_in_stock', headerName: 'Stock', width: 75 },
   { field: 'product_price', headerName: 'Price', width: 100 },
-  { field: 'discount_percentage', headerName: 'Discount (%)', width: 50 },
+  { field: 'discount_percentage', headerName: 'Discount (%)', width: 50},
+  { field: 'category_name', headerName: 'Category'},
 ];
 
 interface IProductTableProps {

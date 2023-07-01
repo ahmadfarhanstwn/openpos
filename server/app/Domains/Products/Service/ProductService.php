@@ -3,6 +3,7 @@
 namespace App\Domains\Products\Service;
 
 use App\Domains\Products\Repository\IProductRepository;
+use App\Http\Requests\ProductStoreRequest;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -48,7 +49,7 @@ class ProductService
         }
     }
 
-    public function store($request = array(), int $userId)
+    public function store(array $request = array(), int $userId)
     {
         try {
             $data = $this->productRepository->store($request, $userId);

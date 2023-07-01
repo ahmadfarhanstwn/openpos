@@ -2,6 +2,7 @@
 namespace App\Domains\Products\Repository;
 
 use App\Domains\Products\Repository\IProductRepository;
+use App\Http\Requests\ProductStoreRequest;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,11 @@ class ProductRepository implements IProductRepository
     
     public function index(int $currentPage, int $perPage)
     {
-        return $this->productModel->where('is_deleted', 'N')
+        return $this->productModel
+            ->join('product_categories', 'product_categories.category_id', '=', 'products.category_id')
+            ->join('product_units', 'product_units.unit_id', '=', 'products.unit_id')
+            ->select('products.*', 'product_categories.category_name', 'product_units.unit_name')
+            ->where('products.is_deleted', 'N')
             ->paginate($perPage, ['*'], 'page', $currentPage);
     }
 
