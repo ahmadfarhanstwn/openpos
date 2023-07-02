@@ -1,5 +1,6 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { IProduct } from '../../../../redux/api/Types/productTypes';
+import { DeleteProductButton, EditProductButton } from './ActionButtons';
 
 const columns: GridColDef[] = [
   { field: 'product_id', headerName: 'Product ID' },
@@ -10,6 +11,20 @@ const columns: GridColDef[] = [
   { field: 'product_price', headerName: 'Price', width: 100 },
   { field: 'discount_percentage', headerName: 'Discount (%)', width: 50},
   { field: 'category_name', headerName: 'Category'},
+  { 
+    field: "actions",
+    headerName: "Actions",
+    sortable: false,
+    width: 140,
+    renderCell: (params) => {
+        return (
+            <div className="d-flex justify-content-between align-items-center" style={{ cursor: "pointer" }}>
+                <EditProductButton product_id={params.row.product_id} />
+                <DeleteProductButton product_id={params.row.product_id} />
+            </div>
+        );
+    }
+  }
 ];
 
 interface IProductTableProps {
@@ -34,7 +49,6 @@ const ProductTable: React.FC<IProductTableProps> = (
       <DataGrid
         columns={columns}
         rows={data}
-        // {...data}
         rowCount={rowCount}
         loading={isLoading}
         pageSizeOptions={[5]}
