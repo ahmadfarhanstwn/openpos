@@ -20,7 +20,7 @@ const columns: GridColDef[] = [
         return (
             <div className="d-flex justify-content-between align-items-center" style={{ cursor: "pointer" }}>
                 <EditProductButton product_id={params.row.product_id} />
-                <DeleteProductButton product_id={params.row.product_id} />
+                <DeleteProductButton product_id={params.row.product_id} product_name={params.row.product_name} />
             </div>
         );
     }

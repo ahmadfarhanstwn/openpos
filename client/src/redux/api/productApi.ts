@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { BASE_URL } from './constants'
-import { ICreateProductResponse, IGetPaginateProductsQueryParams } from './Types/productTypes'
+import { ICreateProductResponse, IGetPaginateProductsQueryParams, IUpdateDeleteProductQueryParams } from './Types/productTypes'
 import { setCurrentPageProducts, setPerPageProducts, setProducts, setTotalDataProducts } from '../features/productSlice'
 import { RootState } from '../store'
 import { AddProductInput } from '../../pages/modules/Products/Schema/AddProductSchema'
@@ -36,7 +36,6 @@ export const productApi = createApi({
                 } catch(err) {}
             }
         }),
-        //TODO: refactor each types to each file
         createProduct : builder.mutation<ICreateProductResponse, AddProductInput>({
             query(data) {
                 return {
@@ -46,6 +45,16 @@ export const productApi = createApi({
                     credentials: 'same-origin'
                 }
             }
+        }),
+        deleteProduct: builder.mutation<any, IUpdateDeleteProductQueryParams>({
+            query(args) {
+                const {product_id} = args
+                return {
+                    url: `product/${product_id}`,
+                    method: 'DELETE',
+                    credentials: 'same-origin'
+                }
+            },
         }),
         getProductUnits: builder.query<any, void>({
             query() {
@@ -68,4 +77,4 @@ export const productApi = createApi({
     })
 })
 
-export const { useGetPaginateProductsQuery, useCreateProductMutation, useGetProductUnitsQuery, useGetProductCategoriesQuery, useLazyGetPaginateProductsQuery } = productApi
+export const { useGetPaginateProductsQuery, useCreateProductMutation, useGetProductUnitsQuery, useGetProductCategoriesQuery, useLazyGetPaginateProductsQuery, useDeleteProductMutation } = productApi
