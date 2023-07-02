@@ -1,51 +1,50 @@
-import { InputProps, FormControl, Typography, Input as _Input, FormHelperText } from '@mui/material'
+import { Input as _Input, TextField, TextFieldProps } from '@mui/material'
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { styled } from '@mui/material/styles'
-
-const Input = styled(_Input)`
-  background-color: "#4caf50";
-  padding: 0.4rem 0.7rem;
-`;
 
 type IFormInputProps = {
     name: string,
     label: string,
-} & InputProps
+    defaultVal?: string | number,
+    formType?: string
+} & TextFieldProps
 
 const FormInput: React.FC<IFormInputProps> = ({
     name,
     label,
+    defaultVal,
+    formType,
     ...otherProps
 }) => {
-    const { control, formState: { errors }} = useFormContext()
+    const { control, formState: { errors }, setValue} = useFormContext()
+
+    const handleValueChange = (value: string) => {
+        const parsedValue = parseFloat(value);
+        if (formType === 'number') {
+            setValue(name, isNaN(parsedValue) ? '' : parsedValue, { shouldValidate: true });
+        } else {
+            setValue(name, value)
+        }
+    };
 
     return (
         <Controller
             control={control}
-            defaultValue=''
+            defaultValue={defaultVal !== undefined ? String(defaultVal) : ''}
             name={name}
             render={({ field }) => (
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                    <Typography
-                        variant='body2'
-                        sx={{ color: '#2363eb', mb: 1, fontWeight: 500 }}
-                    >
-                        {label}
-                    </Typography>
-                    <Input
-                        {...field}
-                        fullWidth
-                        disableUnderline
-                        sx={{ borderRadius: '1rem'}}
-                        placeholder={label}
-                        error={!!errors[name]}
-                        {...otherProps}
-                    />
-                    <FormHelperText error={!!errors[name]}>
-                        {errors[name] ? errors[name]?.message as string : ''}
-                    </FormHelperText>
-                </FormControl>
+                <TextField 
+                    {...field}
+                    fullWidth
+                    name={name}
+                    label={label}
+                    error={!!errors[name]}
+                    helperText={errors[name] ? errors[name]?.message as string : ''}
+                    sx={{ borderRadius: '1rem'}}
+                    type={formType ? formType : 'text'}
+                    onChange={(event) => handleValueChange(event.target.value)}
+                    {...otherProps}
+                />
             )}
         />
     )

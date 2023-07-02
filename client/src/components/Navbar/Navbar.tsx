@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react'
-import { IUser } from '../../redux/api/types'
+import { IUser } from '../../redux/api/Types/userTypes'
 import { AppBar, Box, Button, IconButton, InputBase, Menu, MenuItem, Toolbar, Typography, useTheme } from '@mui/material'
 import FlexBetween from '../FlexBetween'
 import { ArrowDropDownOutlined, Menu as MenuIcon, Notifications, Search, SettingsOutlined} from '@mui/icons-material'

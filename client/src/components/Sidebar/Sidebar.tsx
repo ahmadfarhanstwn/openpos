@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { IUser } from '../../redux/api/types'
+import { IUser } from '../../redux/api/Types/userTypes'
 import { Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme,  } from '@mui/material'
 import { useLocation, useNavigate } from 'react-router-dom'
 import FlexBetween from '../FlexBetween'

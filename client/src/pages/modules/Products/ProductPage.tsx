@@ -1,11 +1,12 @@
 import { AddCircleOutlineRounded } from '@mui/icons-material';
 import { Box, Button, Card, CardContent, Typography, useTheme } from '@mui/material'
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {  useSelector } from 'react-redux';
-import { useGetPaginateProductsQuery } from '../../../redux/api/productApi';
+import { useLazyGetPaginateProductsQuery } from '../../../redux/api/productApi';
 import ProductTable from './Components/ProductTable';
 import { RootState } from '../../../redux/store';
-import { IProductTransformed } from '../../../redux/api/types';
+import { IProductTransformed } from '../../../redux/api/Types/productTypes';
+import AddProductModal from './Components/AddProductModal';
 
 const ProductPage = () => {
     const theme = useTheme();
@@ -15,11 +16,23 @@ const ProductPage = () => {
         pageSize: 10,
       });
 
-    const { isLoading } = useGetPaginateProductsQuery({current_page: paginationModel.page, per_page: paginationModel.pageSize});
+    const [getPaginateProducts, {isLoading}] = useLazyGetPaginateProductsQuery();
+
+    useEffect(() => {
+        getPaginateProducts({current_page: paginationModel.page, per_page: paginationModel.pageSize});
+    }, [])
 
     const rows = useSelector((state: RootState) => state.productState.products)
     const rowCount = useSelector((state: RootState) => state.productState.totalData)
     const [transformedRows, setTransformedRows] = useState<IProductTransformed[]>([])
+
+    //add product modal
+    const [open, setOpen] = useState(false)
+    const handleOpen = () => setOpen(true)
+    const handleClose = () => {
+        setOpen(false)
+        getPaginateProducts({current_page: paginationModel.page, per_page: paginationModel.pageSize});
+    }
 
     useEffect(() => {
         const transformedData: IProductTransformed[] = rows.map((row) => ({
@@ -30,19 +43,16 @@ const ProductPage = () => {
         setTransformedRows(transformedData)
     }, [rows])
 
-    const onClickCreateProductModal = useCallback(() => {
-        console.log('Open modal')
-    }, [])
-
     return (
         <Box p={2} flexGrow={1} display="flex" flexDirection="column">
             <Typography variant='h4' sx={{fontWeight: "bold", marginBottom: '2rem', color: theme.palette.primary.main}}>Products</Typography>
             <Card sx={{backgroundImage: "none", backgroundColor: theme.palette.background.default, borderRadius: "0.55rem"}}>
                 <CardContent>
                     <Box flexGrow={1} display="flex" flexDirection="row" sx={{marginBottom: '1rem'}}>
-                        <Button onClick={onClickCreateProductModal} variant='contained' startIcon={<AddCircleOutlineRounded />}>
+                        <Button onClick={handleOpen} variant='contained' startIcon={<AddCircleOutlineRounded />}>
                             New Product
                         </Button>
+                        <AddProductModal handleClose={handleClose} open={open} />
                     </Box>
                     <ProductTable data={transformedRows} isLoading={isLoading} paginationModel={paginationModel} setPaginationModel={setPaginationModel} rowCount={rowCount} />
                 </CardContent>

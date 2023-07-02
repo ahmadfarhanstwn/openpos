@@ -1,5 +1,5 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { IProduct } from '../../../../redux/api/types';
+import { IProduct } from '../../../../redux/api/Types/productTypes';
 
 const columns: GridColDef[] = [
   { field: 'product_id', headerName: 'Product ID' },

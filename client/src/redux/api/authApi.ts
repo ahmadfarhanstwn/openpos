@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { BASE_URL } from './constants'
-import { ISignInResponse, ISignUpResponse } from './types'
+import { ISignInResponse, ISignUpResponse } from './Types/userTypes'
 import { logout, setToken, setUser } from '../features/userSlice'
 import { SignUpInput } from '../../pages/SignUpPage'
 import { SignInInput } from '../../pages/SignInPage'

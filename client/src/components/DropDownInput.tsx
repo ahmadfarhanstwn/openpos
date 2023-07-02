@@ -1,4 +1,4 @@
-import { FormControl, Typography, FormHelperText, Select, MenuItem } from '@mui/material'
+import { MenuItem, TextField, TextFieldProps } from '@mui/material'
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
@@ -11,45 +11,41 @@ type IDropDownInputProps = {
     name: string,
     label: string,
     values: IMenuItemsValues[]
-}
+} & TextFieldProps
+
 const DropDownInput: React.FC<IDropDownInputProps> = ({
     name,
     label,
     values,
+    ...otherProps
 }) => {
     const { control, formState: {errors}} = useFormContext()
 
     return (
         <Controller
             control={control}
-            defaultValue=''
+            defaultValue={values[0]?.value ? values[0].value : 1}
             name={name}
             render={({ field }) => (
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                    <Typography
-                        variant='body2'
-                        sx={{ color: '#2363eb', mb: 1, fontWeight: 500 }}
-                    >
-                        {label}
-                    </Typography>
-                    <Select
-                        {...field}
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label={label}
-                        // onChange={handleChange}
-                        name={name}
-                        fullWidth
-                        required
-                    >
-                        {values.map((value, index) => (
-                            <MenuItem key={value.value} defaultChecked={index === 0} value={value.value}>{value.label}</MenuItem>
-                        ))}
-                    </Select>
-                    <FormHelperText error={!!errors[name]}>
-                        {errors[name]?.message as string}
-                    </FormHelperText>
-                </FormControl>
+                <TextField 
+                    {...field}
+                    fullWidth
+                    id="outlined-select-currency"
+                    name={name}
+                    label={label}
+                    error={!!errors[name]}
+                    helperText={errors[name] ? errors[name]?.message as string : ''}
+                    sx={{ borderRadius: '1rem'}}
+                    select
+                    defaultValue={values[0]?.value ? values[0].value : 1}
+                    {...otherProps}
+                >
+                    {values.map((value) => (
+                        <MenuItem key={value.value} value={value.value}>
+                            {value.label}
+                        </MenuItem>
+                    ))}
+                </TextField>
             )}
         />
     )
