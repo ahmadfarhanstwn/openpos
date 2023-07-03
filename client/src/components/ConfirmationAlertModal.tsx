@@ -15,6 +15,10 @@ interface IConfirmationAlertModalProps {
 }
 
 const ConfirmationAlertModal: React.FC<IConfirmationAlertModalProps> = ({open, handleAgree, handleClose, title, subtitle}) => {
+  if (!open) {
+    return null; // Early return when open is false
+  }
+  
   return (
     <div>
       <Dialog

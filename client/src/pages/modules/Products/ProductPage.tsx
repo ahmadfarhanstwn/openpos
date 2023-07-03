@@ -1,6 +1,6 @@
 import { AddCircleOutlineRounded } from '@mui/icons-material';
 import { Box, Button, Card, CardContent, Typography, useTheme } from '@mui/material'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {  useSelector } from 'react-redux';
 import { useLazyGetPaginateProductsQuery } from '../../../redux/api/productApi';
 import ProductTable from './Components/ProductTable';
@@ -18,8 +18,12 @@ const ProductPage = () => {
 
     const [getPaginateProducts, {isLoading}] = useLazyGetPaginateProductsQuery();
 
-    useEffect(() => {
+    const getProductsData = useCallback(() => {
         getPaginateProducts({current_page: paginationModel.page, per_page: paginationModel.pageSize});
+    }, [paginationModel])
+
+    useEffect(() => {
+        getProductsData()
     }, [])
 
     const rows = useSelector((state: RootState) => state.productState.products)
@@ -31,7 +35,7 @@ const ProductPage = () => {
     const handleOpen = () => setOpen(true)
     const handleClose = () => {
         setOpen(false)
-        getPaginateProducts({current_page: paginationModel.page, per_page: paginationModel.pageSize});
+        getProductsData()
     }
 
     useEffect(() => {
@@ -54,7 +58,14 @@ const ProductPage = () => {
                         </Button>
                         <AddProductModal handleClose={handleClose} open={open} />
                     </Box>
-                    <ProductTable data={transformedRows} isLoading={isLoading} paginationModel={paginationModel} setPaginationModel={setPaginationModel} rowCount={rowCount} />
+                    <ProductTable 
+                        data={transformedRows} 
+                        isLoading={isLoading} 
+                        paginationModel={paginationModel} 
+                        setPaginationModel={setPaginationModel} 
+                        rowCount={rowCount}
+                        onDeleteSuccess={getProductsData} 
+                    />
                 </CardContent>
             </Card>
         </Box>
