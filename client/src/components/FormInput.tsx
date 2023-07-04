@@ -43,6 +43,7 @@ const FormInput: React.FC<IFormInputProps> = ({
                     sx={{ borderRadius: '1rem'}}
                     type={formType ? formType : 'text'}
                     onChange={(event) => handleValueChange(event.target.value)}
+                    defaultValue={defaultVal !== undefined ? String(defaultVal) : ''}
                     {...otherProps}
                 />
             )}

@@ -1,6 +1,7 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { IProduct } from '../../../../redux/api/Types/productTypes';
-import { DeleteProductButton, EditProductButton } from './ActionButtons';
+import { EditProductButton } from './EditProductButton';
+import { DeleteProductButton } from './DeleteProductButton';
 
 interface IProductTableProps {
   data: IProduct[],
@@ -8,7 +9,7 @@ interface IProductTableProps {
   paginationModel: any,
   setPaginationModel: React.Dispatch<React.SetStateAction<any>>,
   rowCount: number,
-  onDeleteSuccess: () => void
+  onSuccess: () => void
 }
 
 const ProductTable: React.FC<IProductTableProps> = (
@@ -18,7 +19,7 @@ const ProductTable: React.FC<IProductTableProps> = (
     paginationModel,
     setPaginationModel,
     rowCount,
-    onDeleteSuccess
+    onSuccess
   }
 ) => {
   const columns: GridColDef[] = [
@@ -38,11 +39,11 @@ const ProductTable: React.FC<IProductTableProps> = (
       renderCell: (params) => {
           return (
               <div className="d-flex justify-content-between align-items-center" style={{ cursor: "pointer" }}>
-                  <EditProductButton product_id={params.row.product_id} />
-                  <DeleteProductButton 
+                  <EditProductButton product_id={params.row.product_id} onUpdateSuccess={onSuccess} />
+                  <DeleteProductButton
                     product_id={params.row.product_id} 
                     product_name={params.row.product_name} 
-                    onDeleteSuccess={onDeleteSuccess} 
+                    onDeleteSuccess={onSuccess} 
                   />
               </div>
           );

@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { BASE_URL } from './constants'
-import { ICreateProductResponse, IGetPaginateProductsQueryParams, IUpdateDeleteProductQueryParams } from './Types/productTypes'
+import { IProductResponse, IGetPaginateProductsQueryParams, IProductQueryParams } from './Types/productTypes'
 import { setCurrentPageProducts, setPerPageProducts, setProducts, setTotalDataProducts } from '../features/productSlice'
 import { RootState } from '../store'
-import { AddProductInput } from '../../pages/modules/Products/Schema/AddProductSchema'
+import { AddUpdateProductInput } from '../../pages/modules/Products/Schema/AddProductSchema'
 
 export const productApi = createApi({
     reducerPath: 'productApi',
@@ -36,7 +36,7 @@ export const productApi = createApi({
                 } catch(err) {}
             }
         }),
-        createProduct : builder.mutation<ICreateProductResponse, AddProductInput>({
+        createProduct : builder.mutation<IProductResponse, AddUpdateProductInput>({
             query(data) {
                 return {
                     url: 'product',
@@ -46,7 +46,29 @@ export const productApi = createApi({
                 }
             }
         }),
-        deleteProduct: builder.mutation<any, IUpdateDeleteProductQueryParams>({
+        updateProduct : builder.mutation<IProductResponse, AddUpdateProductInput & { product_id: number }>({
+            query(data) {
+                const { product_id, ...requestData } = data;
+
+                return {
+                    url: `product/${product_id}`,
+                    method: 'PUT',
+                    body: requestData,
+                    credentials: 'same-origin'
+                }
+            }
+        }),
+        getProductById: builder.query<IProductResponse, IProductQueryParams>({
+            query(args) {
+                const { product_id } = args
+                return {
+                    url: `product/${product_id}`,
+                    method: 'GET',
+                    credentials: 'same-origin'
+                }
+            }
+        }),
+        deleteProduct: builder.mutation<any, IProductQueryParams>({
             query(args) {
                 const {product_id} = args
                 return {
@@ -77,4 +99,13 @@ export const productApi = createApi({
     })
 })
 
-export const { useGetPaginateProductsQuery, useCreateProductMutation, useGetProductUnitsQuery, useGetProductCategoriesQuery, useLazyGetPaginateProductsQuery, useDeleteProductMutation } = productApi
+export const { 
+    useGetPaginateProductsQuery, 
+    useCreateProductMutation, 
+    useGetProductUnitsQuery, 
+    useGetProductCategoriesQuery, 
+    useLazyGetPaginateProductsQuery, 
+    useDeleteProductMutation,
+    useUpdateProductMutation,
+    useGetProductByIdQuery
+} = productApi

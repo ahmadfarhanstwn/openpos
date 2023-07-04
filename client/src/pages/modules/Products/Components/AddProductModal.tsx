@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import { Box, Grid, Typography, useTheme } from '@mui/material'
 import FormInput from '../../../../components/FormInput'
 import { LoadingButton } from '@mui/lab'
-import { AddProductInput, addProductSchema } from '../Schema/AddProductSchema'
+import { AddUpdateProductInput, addUpdateProductSchema } from '../Schema/AddProductSchema'
 import DropDownInput from '../../../../components/DropDownInput'
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -25,15 +25,15 @@ const AddProductModal: React.FC<IAddProductModalProps> = ({open, handleClose}) =
     const [unitValues, setUnitValues] = useState([])
     const [categoryValues, setCategoryValues] = useState([])
 
-    const methods = useForm<AddProductInput>({
-        resolver: zodResolver(addProductSchema)
+    const methods = useForm<AddUpdateProductInput>({
+        resolver: zodResolver(addUpdateProductSchema)
     })
 
-    const { reset, handleSubmit, formState: {isSubmitSuccessful} } = methods
+    const { reset, handleSubmit } = methods
 
     const [createProduct, {isLoading, isSuccess, isError, error}] = useCreateProductMutation()
 
-    const onSubmitHandlers: SubmitHandler<AddProductInput> = (values) => {
+    const onSubmitHandlers: SubmitHandler<AddUpdateProductInput> = (values) => {
         createProduct(values)
     }
 
@@ -66,8 +66,9 @@ const AddProductModal: React.FC<IAddProductModalProps> = ({open, handleClose}) =
 
     useEffect(() => {
         if (isSuccess) {
-          toast.success('Product created successfully');
-          handleClose()
+            reset();
+            toast.success('Product created successfully');
+            handleClose()
         }
     
         if (isError) {
@@ -85,12 +86,6 @@ const AddProductModal: React.FC<IAddProductModalProps> = ({open, handleClose}) =
           }
         }
       }, [isLoading]);
-
-    useEffect(() => {
-    if (isSubmitSuccessful) {
-        reset();
-    }
-    }, [isSubmitSuccessful]);
 
     return (
         <BaseFormModal open={open} handleClose={handleClose} title='Add Product' >

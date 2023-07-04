@@ -30,12 +30,12 @@ export interface IGetPaginateProductsQueryParams {
     current_page: number, 
 }
 
-export interface IUpdateDeleteProductQueryParams {
+export interface IProductQueryParams {
     product_id: number
 }
 
 //create product
-export interface ICreateProductResponse {
+export interface IProductResponse {
     message: string,
     data : IProduct
 }

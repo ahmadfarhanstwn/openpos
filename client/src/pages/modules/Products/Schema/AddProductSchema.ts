@@ -1,6 +1,6 @@
 import { TypeOf, number, object, string } from "zod"
 
-export const addProductSchema = object({
+export const addUpdateProductSchema = object({
     product_barcode: string().min(1, 'Product Barcode is required').max(25, 'Product Barcode must be less than 25 characters'),
     product_name: string().min(1, 'Product Name is required').max(25, 'Product Name must be less than 25 characters'),
     unit_id : number(),
@@ -19,4 +19,4 @@ export const addProductSchema = object({
     }),
 })
 
-export type AddProductInput = TypeOf<typeof addProductSchema>
+export type AddUpdateProductInput = TypeOf<typeof addUpdateProductSchema>

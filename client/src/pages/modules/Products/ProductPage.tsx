@@ -64,7 +64,7 @@ const ProductPage = () => {
                         paginationModel={paginationModel} 
                         setPaginationModel={setPaginationModel} 
                         rowCount={rowCount}
-                        onDeleteSuccess={getProductsData} 
+                        onSuccess={getProductsData} 
                     />
                 </CardContent>
             </Card>
