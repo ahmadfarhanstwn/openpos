@@ -20,7 +20,7 @@ interface IUpdateProductModalProps {
 }
 
 const UpdateProductModal: React.FC<IUpdateProductModalProps> = ({
-    open, handleClose, product_id
+    open, handleClose, product_id, onSuccess
 }) => {
     if(!open) return
 
@@ -39,7 +39,13 @@ const UpdateProductModal: React.FC<IUpdateProductModalProps> = ({
       };
 
     const [productValues, setProductValues] = useState<IProduct>();
-    const { data: productResponse} = useGetProductByIdQuery({product_id: product_id});
+    const { data: productResponse, refetch} = useGetProductByIdQuery({product_id: product_id});
+
+    useEffect(() => {
+      if (open) {
+        refetch(); // Refetch the API when the modal is opened
+      }
+    }, [open, refetch])
 
     useEffect(() => {
         if (productResponse) {
@@ -80,6 +86,7 @@ const UpdateProductModal: React.FC<IUpdateProductModalProps> = ({
             reset();
             toast.success('Product created successfully');
             handleClose()
+            onSuccess()
         }
     
         if (isError) {
