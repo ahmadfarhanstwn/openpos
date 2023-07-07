@@ -4,12 +4,14 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useCreateProductMutation, useGetProductCategoriesQuery, useGetProductUnitsQuery } from '../../../../redux/api/productApi'
 import { toast } from 'react-toastify'
-import { Box, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material'
 import FormInput from '../../../../components/FormInput'
 import { LoadingButton } from '@mui/lab'
 import { AddUpdateProductInput, addUpdateProductSchema } from '../Schema/AddProductSchema'
 import DropDownInput from '../../../../components/DropDownInput'
 import 'react-toastify/dist/ReactToastify.css';
+import { Add } from '@mui/icons-material'
+import AddUnitInputModal from './AddUnitInputModal'
 
 interface IAddProductModalProps {
     open: boolean,
@@ -37,7 +39,7 @@ const AddProductModal: React.FC<IAddProductModalProps> = ({open, handleClose}) =
         createProduct(values)
     }
 
-    const { data : productUnitsResponse } = useGetProductUnitsQuery()
+    const { data : productUnitsResponse, refetch : refetchProductUnit } = useGetProductUnitsQuery()
     const { data : productCategoriesResponse } = useGetProductCategoriesQuery()
 
     useEffect(() => {
@@ -87,6 +89,16 @@ const AddProductModal: React.FC<IAddProductModalProps> = ({open, handleClose}) =
         }
       }, [isLoading]);
 
+      const [showAddUnitModal, setShowAddUnitModal] = useState(false)
+
+      const handleClickShowAddUnitModal = () => {
+        setShowAddUnitModal(true)
+      }
+
+      const handleCloseAddUnitModal = () => {
+        setShowAddUnitModal(false)
+      } 
+
     return (
         <BaseFormModal open={open} handleClose={handleClose} title='Add Product' >
             <FormProvider {...methods}>
@@ -98,8 +110,13 @@ const AddProductModal: React.FC<IAddProductModalProps> = ({open, handleClose}) =
                       <Grid item xs={12}>
                           <FormInput name='product_name' label='Product Name' />
                       </Grid>
-                      <Grid item xs={12}>
-                          <DropDownInput name='unit_id' label='Unit' values={unitValues} />
+                      <Grid item xs={12} sx={{display: 'flex', flexDirection: 'row'}}>
+                          <DropDownInput name='unit_id' label='Unit' values={unitValues} sx={{width: '95%'}} />
+                          <Box>
+                            <IconButton sx={{ padding: '1rem 0.5rem'}} onClick={handleClickShowAddUnitModal}>
+                                <Add />
+                            </IconButton>
+                          </Box>
                       </Grid>
                       <Grid item xs={12}>
                           <DropDownInput name='category_id' label='Category' values={categoryValues} />
@@ -125,6 +142,7 @@ const AddProductModal: React.FC<IAddProductModalProps> = ({open, handleClose}) =
                   </LoadingButton>
               </Box>
           </FormProvider>
+          <AddUnitInputModal open={showAddUnitModal} handleClose={handleCloseAddUnitModal} onSuccess={refetchProductUnit} />
         </BaseFormModal>
     )
 }

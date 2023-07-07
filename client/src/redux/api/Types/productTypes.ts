@@ -39,3 +39,13 @@ export interface IProductResponse {
     message: string,
     data : IProduct
 }
+
+export interface IProductUnit {
+    unit_id: number,
+    unit_name: string
+}
+
+export interface IProductUnitResponse {
+    message: string,
+    data: IProductUnit
+}

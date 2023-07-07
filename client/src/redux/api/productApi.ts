@@ -4,6 +4,7 @@ import { IProductResponse, IGetPaginateProductsQueryParams, IProductQueryParams 
 import { setCurrentPageProducts, setPerPageProducts, setProducts, setTotalDataProducts } from '../features/productSlice'
 import { RootState } from '../store'
 import { AddUpdateProductInput } from '../../pages/modules/Products/Schema/AddProductSchema'
+import { AddProductUnitInput } from '../../pages/modules/Products/Schema/AddProductUnitSchema'
 
 export const productApi = createApi({
     reducerPath: 'productApi',
@@ -78,6 +79,16 @@ export const productApi = createApi({
                 }
             },
         }),
+        createProductUnit : builder.mutation<IProductResponse, AddProductUnitInput>({
+            query(data) {
+                return {
+                    url: 'unit',
+                    method: 'POST',
+                    body: data,
+                    credentials: 'same-origin'
+                }
+            }
+        }),
         getProductUnits: builder.query<any, void>({
             query() {
                 return {
@@ -103,9 +114,11 @@ export const {
     useGetPaginateProductsQuery, 
     useCreateProductMutation, 
     useGetProductUnitsQuery, 
+    useLazyGetProductUnitsQuery,
     useGetProductCategoriesQuery, 
     useLazyGetPaginateProductsQuery, 
     useDeleteProductMutation,
     useUpdateProductMutation,
-    useGetProductByIdQuery
+    useGetProductByIdQuery,
+    useCreateProductUnitMutation,
 } = productApi
