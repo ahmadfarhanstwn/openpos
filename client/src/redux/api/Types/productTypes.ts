@@ -49,3 +49,13 @@ export interface IProductUnitResponse {
     message: string,
     data: IProductUnit
 }
+
+export interface IProductCategory {
+    category_id: number,
+    category_name: string
+}
+
+export interface IProductCategoryResponse {
+    message: string,
+    data: IProductCategory
+}

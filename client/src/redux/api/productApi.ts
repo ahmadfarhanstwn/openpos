@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { BASE_URL } from './constants'
-import { IProductResponse, IGetPaginateProductsQueryParams, IProductQueryParams } from './Types/productTypes'
+import { IProductResponse, IGetPaginateProductsQueryParams, IProductQueryParams, IProductUnitResponse, IProductCategoryResponse } from './Types/productTypes'
 import { setCurrentPageProducts, setPerPageProducts, setProducts, setTotalDataProducts } from '../features/productSlice'
 import { RootState } from '../store'
 import { AddUpdateProductInput } from '../../pages/modules/Products/Schema/AddProductSchema'
 import { AddProductUnitInput } from '../../pages/modules/Products/Schema/AddProductUnitSchema'
+import { AddProductCategoryInput } from '../../pages/modules/Products/Schema/AddProductCategorySchema'
 
 export const productApi = createApi({
     reducerPath: 'productApi',
@@ -79,7 +80,7 @@ export const productApi = createApi({
                 }
             },
         }),
-        createProductUnit : builder.mutation<IProductResponse, AddProductUnitInput>({
+        createProductUnit : builder.mutation<IProductUnitResponse, AddProductUnitInput>({
             query(data) {
                 return {
                     url: 'unit',
@@ -107,6 +108,16 @@ export const productApi = createApi({
                 }
             }
         }),
+        createProductCategory : builder.mutation<IProductCategoryResponse, AddProductCategoryInput>({
+            query(data) {
+                return {
+                    url: 'category',
+                    method: 'POST',
+                    body: data,
+                    credentials: 'same-origin'
+                }
+            }
+        }),
     })
 })
 
@@ -121,4 +132,5 @@ export const {
     useUpdateProductMutation,
     useGetProductByIdQuery,
     useCreateProductUnitMutation,
+    useCreateProductCategoryMutation
 } = productApi
