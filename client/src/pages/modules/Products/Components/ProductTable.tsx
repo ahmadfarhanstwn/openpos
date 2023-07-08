@@ -3,6 +3,7 @@ import { EditProductButton } from './EditProductButton';
 import { DeleteProductButton } from './DeleteProductButton';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
 import { ITableColumn } from '../../../../types/ITableColumn';
+import SearchProductFilter from './SearchProductFilter';
 
 interface IProductTableProps {
   data: IProduct[],
@@ -22,20 +23,20 @@ const ProductTable: React.FC<IProductTableProps> = (
   }
 ) => {
   const columns: ITableColumn[] = [
-    { id: 'product_id', label: 'Product ID' },
+    { id: 'product_id', label: 'Product ID', minWidth: 50 },
     { id: 'product_barcode', label: 'Barcode', minWidth: 200 },
     { id: 'product_name', label: 'Name', minWidth: 250 },
-    { id: 'unit_name', label: 'Unit', minWidth: 50},
-    { id: 'unit_in_stock', label: 'Stock', minWidth: 75 },
+    { id: 'unit_name', label: 'Unit', minWidth: 150},
+    { id: 'unit_in_stock', label: 'Stock', minWidth: 20 },
     { id: 'product_price', label: 'Price', minWidth: 100 },
-    { id: 'discount_percentage', label: 'Discount (%)', minWidth: 50},
-    { id: 'category_name', label: 'Category', minWidth: 100},
+    { id: 'discount_percentage', label: 'Discount (%)', minWidth: 20},
+    { id: 'category_name', label: 'Category', minWidth: 150},
     { id: "actions", label: "Actions"}
   ];
 
   return (
     <Paper sx={{ width: '100%' }}>
-      <TableContainer sx={{maxHeight: 440}}>
+      <TableContainer sx={{maxHeight: 400}}>
         <Table>
           <TableHead>
             <TableRow>
@@ -51,7 +52,7 @@ const ProductTable: React.FC<IProductTableProps> = (
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* add filtering tools */}
+            <SearchProductFilter />
             {data
               .slice(page * pageSize, page * pageSize + pageSize)
               .map((row) => {
