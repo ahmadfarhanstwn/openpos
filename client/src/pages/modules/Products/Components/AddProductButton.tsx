@@ -4,10 +4,20 @@ import AddProductModal from './AddProductModal'
 import { AddCircleOutlineRounded } from '@mui/icons-material'
 
 interface IAddProductButtonProps {
-    getProductsData : () => void
+    getProductsData : () => void,
+    unitValues: never[],
+    categoryValues: never[],
+    refetchProductUnit: () => void,
+    refetchProductCategory: () => void
 }
 
-const AddProductButton: React.FC<IAddProductButtonProps> = ({getProductsData}) => {
+const AddProductButton: React.FC<IAddProductButtonProps> = ({
+    getProductsData,
+    unitValues, 
+    categoryValues,
+    refetchProductCategory,
+    refetchProductUnit
+}) => {
     const [open, setOpen] = useState(false)
     const handleOpen = () => setOpen(true)
     const handleClose = () => {
@@ -20,7 +30,14 @@ const AddProductButton: React.FC<IAddProductButtonProps> = ({getProductsData}) =
             <Button onClick={handleOpen} variant='contained' startIcon={<AddCircleOutlineRounded />}>
                 New Product
             </Button>
-            <AddProductModal handleClose={handleClose} open={open} />
+            <AddProductModal 
+                handleClose={handleClose} 
+                open={open} 
+                unitValues={unitValues} 
+                categoryValues={categoryValues} 
+                refetchProductCategory={refetchProductCategory} 
+                refetchProductUnit={refetchProductUnit} 
+            />
         </div>
     )
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import BaseFormModal from '../../../../components/BaseFormModal'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useCreateProductMutation, useGetProductCategoriesQuery, useGetProductUnitsQuery } from '../../../../redux/api/productApi'
+import { useCreateProductMutation } from '../../../../redux/api/productApi'
 import { toast } from 'react-toastify'
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material'
 import FormInput from '../../../../components/FormInput'
@@ -16,17 +16,25 @@ import AddProductCategoryModal from './AddProductCategoryModal'
 
 interface IAddProductModalProps {
     open: boolean,
-    handleClose: () => void
+    handleClose: () => void,
+    unitValues: never[],
+    categoryValues: never[],
+    refetchProductUnit: () => void,
+    refetchProductCategory: () => void
 }
 
-const AddProductModal: React.FC<IAddProductModalProps> = ({open, handleClose}) => 
+const AddProductModal: React.FC<IAddProductModalProps> = ({
+    open, 
+    handleClose, 
+    unitValues, 
+    categoryValues,
+    refetchProductCategory,
+    refetchProductUnit
+}) => 
 {
     if(!open) return
 
     const theme = useTheme()
-
-    const [unitValues, setUnitValues] = useState([])
-    const [categoryValues, setCategoryValues] = useState([])
 
     const methods = useForm<AddUpdateProductInput>({
         resolver: zodResolver(addUpdateProductSchema)
@@ -39,33 +47,6 @@ const AddProductModal: React.FC<IAddProductModalProps> = ({open, handleClose}) =
     const onSubmitHandlers: SubmitHandler<AddUpdateProductInput> = (values) => {
         createProduct(values)
     }
-
-    const { data : productUnitsResponse, refetch : refetchProductUnit } = useGetProductUnitsQuery()
-    const { data : productCategoriesResponse, refetch: refetchProductCategory } = useGetProductCategoriesQuery()
-
-    useEffect(() => {
-        if (productUnitsResponse) {
-            const productUnitsData = productUnitsResponse.data
-
-            setUnitValues(
-                productUnitsData.map((unit : any) => (
-                    {label: unit.unit_name, value : unit.unit_id}
-                ))
-            )
-        }
-    }, [productUnitsResponse])
-
-    useEffect(() => {
-        if (productCategoriesResponse) {
-            const productCategoriesData = productCategoriesResponse.data
-
-            setCategoryValues(
-                productCategoriesData.map((category : any) => (
-                    {label: category.category_name, value : category.category_id}
-                ))
-            )
-        }
-    }, [productCategoriesResponse])
 
     useEffect(() => {
         if (isSuccess) {

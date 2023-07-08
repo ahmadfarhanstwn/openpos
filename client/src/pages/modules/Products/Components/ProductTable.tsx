@@ -10,7 +10,17 @@ interface IProductTableProps {
   page: number,
   pageSize: number,
   onSuccess: () => void,
-  handleChangePage: (event: unknown, newPage: number) => void
+  handleChangePage: (event: unknown, newPage: number) => void,
+  productBarcodeFilter: string,
+  handleChangeProductBarcodeFilter: (value: string) => void,
+  productNameFilter: string,
+  handleChangeProductNameFilter: (value: string) => void,
+  productUnitFilter: string,
+  handleChangeProductUnitFilter: (value: string) => void,
+  productCategoryFilter: string,
+  handleChangeProductCategoryFilter: (value: string) => void,
+  unitValues: never[],
+  categoryValues: never[]
 }
 
 const ProductTable: React.FC<IProductTableProps> = (
@@ -19,7 +29,17 @@ const ProductTable: React.FC<IProductTableProps> = (
     page,
     pageSize,
     onSuccess,
-    handleChangePage
+    handleChangePage,
+    productBarcodeFilter,
+    handleChangeProductBarcodeFilter,
+    productNameFilter,
+    handleChangeProductNameFilter,
+    productUnitFilter,
+    handleChangeProductUnitFilter,
+    productCategoryFilter,
+    handleChangeProductCategoryFilter,
+    unitValues,
+    categoryValues
   }
 ) => {
   const columns: ITableColumn[] = [
@@ -52,7 +72,18 @@ const ProductTable: React.FC<IProductTableProps> = (
             </TableRow>
           </TableHead>
           <TableBody>
-            <SearchProductFilter />
+            <SearchProductFilter 
+              productBarcodeFilter={productBarcodeFilter}
+              handleChangeProductBarcodeFilter={handleChangeProductBarcodeFilter}
+              productNameFilter={productNameFilter}
+              handleChangeProductNameFilter={handleChangeProductNameFilter}
+              productUnitFilter={productUnitFilter}
+              handleChangeProductUnitFilter={handleChangeProductUnitFilter}
+              productCategoryFilter={productCategoryFilter}
+              handleChangeProductCategoryFilter={handleChangeProductCategoryFilter}
+              unitValues={unitValues}
+              categoryValues={categoryValues}
+            />
             {data
               .slice(page * pageSize, page * pageSize + pageSize)
               .map((row) => {

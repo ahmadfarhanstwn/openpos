@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, Typography, useTheme } from '@mui/material'
 import { useCallback, useEffect, useState} from 'react'
 import {  useSelector } from 'react-redux';
-import { useLazyGetPaginateProductsQuery } from '../../../redux/api/productApi';
+import { useGetProductCategoriesQuery, useGetProductUnitsQuery, useLazyGetPaginateProductsQuery } from '../../../redux/api/productApi';
 import ProductTable from './Components/ProductTable';
 import { RootState } from '../../../redux/store';
 import { IProductTransformed } from '../../../redux/api/Types/productTypes';
@@ -13,10 +13,60 @@ const ProductPage = () => {
     const theme = useTheme();
 
     const [page, setPage] = useState(0);
+    const [productBarcodeFilter, setProductBarcodeFilter] = useState('')
+    const [productNameFilter, setProductNameFilter] = useState('')
+    const [productUnitFilter, setProductUnitFilter] = useState('')
+    const [productCategoryFilter, setProductCategoryFilter] = useState('')
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
+
+    const handleChangeProductBarcodeFilter = (value: string) => {
+        setProductBarcodeFilter(value)
+    }
+
+    const handleChangeProductNameFilter = (value: string) => {
+        setProductNameFilter(value)
+    }
+
+    const handleChangeProductUnitFilter = (value: string) => {
+        setProductUnitFilter(value)
+    }
+
+    const handleChangeProductCategoryFilter = (value: string) => {
+        setProductCategoryFilter(value)
+    }
+
+    const [unitValues, setUnitValues] = useState([])
+    const [categoryValues, setCategoryValues] = useState([])
+
+    const { data : productUnitsResponse, refetch : refetchProductUnit } = useGetProductUnitsQuery()
+    const { data : productCategoriesResponse, refetch: refetchProductCategory } = useGetProductCategoriesQuery()
+
+    useEffect(() => {
+        if (productUnitsResponse) {
+            const productUnitsData = productUnitsResponse.data
+
+            setUnitValues(
+                productUnitsData.map((unit : any) => (
+                    {label: unit.unit_name, value : unit.unit_id}
+                ))
+            )
+        }
+    }, [productUnitsResponse])
+
+    useEffect(() => {
+        if (productCategoriesResponse) {
+            const productCategoriesData = productCategoriesResponse.data
+
+            setCategoryValues(
+                productCategoriesData.map((category : any) => (
+                    {label: category.category_name, value : category.category_id}
+                ))
+            )
+        }
+    }, [productCategoriesResponse])
 
     const [getPaginateProducts] = useLazyGetPaginateProductsQuery();
 
@@ -46,7 +96,13 @@ const ProductPage = () => {
             <Card sx={{backgroundImage: "none", backgroundColor: theme.palette.background.default, borderRadius: "0.55rem"}}>
                 <CardContent>
                     <Box flexGrow={1} display="flex" flexDirection="row" sx={{marginBottom: '1rem'}}>
-                        <AddProductButton getProductsData={getProductsData} />
+                        <AddProductButton 
+                            getProductsData={getProductsData} 
+                            unitValues={unitValues}
+                            categoryValues={categoryValues}
+                            refetchProductUnit={refetchProductUnit}
+                            refetchProductCategory={refetchProductCategory}
+                        />
                     </Box>
                     <ProductTable 
                         data={transformedRows} 
@@ -54,6 +110,16 @@ const ProductPage = () => {
                         pageSize={pageSize}
                         onSuccess={getProductsData} 
                         handleChangePage={handleChangePage}
+                        productBarcodeFilter={productBarcodeFilter}
+                        handleChangeProductBarcodeFilter={handleChangeProductBarcodeFilter}
+                        productNameFilter={productNameFilter}
+                        handleChangeProductNameFilter={handleChangeProductNameFilter}
+                        productUnitFilter={productUnitFilter}
+                        handleChangeProductUnitFilter={handleChangeProductUnitFilter}
+                        productCategoryFilter={productCategoryFilter}
+                        handleChangeProductCategoryFilter={handleChangeProductCategoryFilter}
+                        unitValues={unitValues}
+                        categoryValues={categoryValues}
                     />
                 </CardContent>
             </Card>

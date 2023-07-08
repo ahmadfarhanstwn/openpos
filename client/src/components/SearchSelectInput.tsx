@@ -6,7 +6,7 @@ interface ISearchSelectInputProps {
     label: string,
     value: string,
     itemValues: IMenuItemsValues[],
-    handleChange: () => void
+    handleChange: (value: string) => void
 }
 
 const SearchSelectInput: React.FC<ISearchSelectInputProps> = ({
@@ -20,7 +20,7 @@ const SearchSelectInput: React.FC<ISearchSelectInputProps> = ({
             id="demo-simple-select"
             value={value}
             label="Age"
-            onChange={handleChange}
+            onChange={(event) => handleChange(event.target.value)}
         >
             {itemValues.map((itemValue: IMenuItemsValues) => (
                 <MenuItem value={itemValue.value}>{itemValue.label}</MenuItem>
