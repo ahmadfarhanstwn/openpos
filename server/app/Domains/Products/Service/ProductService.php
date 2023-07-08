@@ -28,7 +28,13 @@ class ProductService
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $data = $this->productRepository->index($currentPage, $perPage);
+        // filter
+        $productBarcode = $request->query('product_barcode', '');
+        $productName = $request->query('product_name', '');
+        $productUnit = $request->query('product_unit', '');
+        $productCategory = $request->query('product_category', '');
+
+        $data = $this->productRepository->index($currentPage, $perPage, $productBarcode, $productName, $productUnit, $productCategory);
         
         return response()->json([
             'message' => 'Success',

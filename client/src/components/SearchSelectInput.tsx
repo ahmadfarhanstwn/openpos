@@ -22,8 +22,9 @@ const SearchSelectInput: React.FC<ISearchSelectInputProps> = ({
             label="Age"
             onChange={(event) => handleChange(event.target.value)}
         >
+            <MenuItem value=''>-</MenuItem>
             {itemValues.map((itemValue: IMenuItemsValues) => (
-                <MenuItem value={itemValue.value}>{itemValue.label}</MenuItem>
+                <MenuItem value={itemValue.label}>{itemValue.label}</MenuItem>
             ))}
         </Select>
     </FormControl>

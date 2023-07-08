@@ -28,6 +28,10 @@ export interface IProductTransformed {
 export interface IGetPaginateProductsQueryParams {
     per_page: number,
     current_page: number, 
+    product_barcode: string,
+    product_name: string,
+    product_unit: string,
+    product_category: string
 }
 
 export interface IProductQueryParams {

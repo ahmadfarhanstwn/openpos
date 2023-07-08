@@ -13,13 +13,26 @@ class ProductRepository implements IProductRepository
     {
     }
     
-    public function index(int $currentPage, int $perPage)
+    public function index(
+        int $currentPage, 
+        int $perPage,
+        string $productBarcode, 
+        string $productName, 
+        string $productUnit,
+        string $productCategory
+    )
     {
         return $this->productModel
             ->join('product_categories', 'product_categories.category_id', '=', 'products.category_id')
             ->join('product_units', 'product_units.unit_id', '=', 'products.unit_id')
             ->select('products.*', 'product_categories.category_name', 'product_units.unit_name')
-            ->where('products.is_deleted', 'N')
+            ->where([
+                ['products.is_deleted', '=', 'N'],
+                ['products.product_barcode', 'LIKE', '%'.$productBarcode.'%'],
+                ['products.product_name', 'LIKE', '%'.$productName.'%'],
+                ['product_units.unit_name', 'LIKE', '%'.$productUnit.'%'],
+                ['product_categories.category_name', 'LIKE', '%'.$productCategory.'%'],
+            ])
             ->paginate($perPage, ['*'], 'page', $currentPage);
     }
 

@@ -20,9 +20,9 @@ export const productApi = createApi({
     endpoints: (builder) => ({
         getPaginateProducts: builder.query<any, IGetPaginateProductsQueryParams>({
             query(args) {
-                const {current_page, per_page} = args
+                const {current_page, per_page, product_barcode, product_name, product_unit, product_category} = args
                 return {
-                    url: `product?current_page=${current_page}&per_page=${per_page}`,
+                    url: `product?current_page=${current_page}&per_page=${per_page}&product_barcode=${product_barcode}&product_name=${product_name}&product_unit=${product_unit}&product_category=${product_category}`,
                     method: 'GET',
                     credentials: 'same-origin'
                 }

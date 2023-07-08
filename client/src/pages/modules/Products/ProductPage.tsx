@@ -32,6 +32,7 @@ const ProductPage = () => {
 
     const handleChangeProductUnitFilter = (value: string) => {
         setProductUnitFilter(value)
+        console.log(productUnitFilter)
     }
 
     const handleChangeProductCategoryFilter = (value: string) => {
@@ -71,12 +72,19 @@ const ProductPage = () => {
     const [getPaginateProducts] = useLazyGetPaginateProductsQuery();
 
     const getProductsData = useCallback(() => {
-        getPaginateProducts({current_page: page, per_page: pageSize});
-    }, [page, pageSize])
+        getPaginateProducts({
+            current_page: page, 
+            per_page: pageSize, 
+            product_barcode: productBarcodeFilter, 
+            product_name: productNameFilter, 
+            product_category: productCategoryFilter, 
+            product_unit: productUnitFilter
+        });
+    }, [page, pageSize, productBarcodeFilter, productNameFilter, productCategoryFilter, productUnitFilter])
 
     useEffect(() => {
         getProductsData()
-    }, [])
+    }, [page, pageSize, productBarcodeFilter, productNameFilter, productCategoryFilter, productUnitFilter])
 
     const rows = useSelector((state: RootState) => state.productState.products)
     const [transformedRows, setTransformedRows] = useState<IProductTransformed[]>([])

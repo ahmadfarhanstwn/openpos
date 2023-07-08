@@ -5,7 +5,14 @@ namespace App\Domains\Products\Repository;
 use App\Http\Requests\ProductStoreRequest;
 
 interface IProductRepository {
-    public function index(int $currentPage, int $perPage);
+    public function index(
+        int $currentPage, 
+        int $perPage, 
+        string $productBarcode, 
+        string $productName, 
+        string $productUnit,
+        string $productCategory
+    );
     public function getById(int $id);
     public function store(array $request = array(), int $userId);
     public function update(array $request = array(), int $id);
