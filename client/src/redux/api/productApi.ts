@@ -6,17 +6,11 @@ import { RootState } from '../store'
 import { AddUpdateProductInput } from '../../pages/modules/Products/Schema/AddProductSchema'
 import { AddProductUnitInput } from '../../pages/modules/Products/Schema/AddProductUnitSchema'
 import { AddProductCategoryInput } from '../../pages/modules/Products/Schema/AddProductCategorySchema'
+import { baseQueryWithReauth } from './baseQueryWithReauth'
 
 export const productApi = createApi({
     reducerPath: 'productApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: `${BASE_URL}/api/`,
-        prepareHeaders: (headers, {getState}) => {
-            const token = (getState() as RootState).userState.token
-            headers.set('Authorization', `Bearer ${token}`);
-            return headers
-        }
-    }),
+    baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
         getPaginateProducts: builder.query<any, IGetPaginateProductsQueryParams>({
             query(args) {

@@ -24,7 +24,8 @@ class JwtMiddleware
             error_log($token);
 
             if (!$token) {
-                abort(401, 'Token not provided');
+                // abort(401, 'Token not provided');
+                return response()->json(['error' => 'Token not provided'], 401);
             }
 
             $user = auth()->user();
