@@ -4,6 +4,7 @@ namespace App\Domains\Products\Service;
 
 use App\Domains\Products\Repository\IProductRepository;
 use App\Http\Requests\ProductStoreRequest;
+use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -51,6 +52,19 @@ class ProductService
                 'data' => $data
             ], Response::HTTP_OK);
         } catch(\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
+    }
+
+    public function getByQuery(string $query)
+    {
+        try {
+            $data = $this->productRepository->getByQuery($query);
+            return response()->json([
+                'message' => 'Success',
+                'data' => $data
+            ], Response::HTTP_OK);
+        } catch(Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
     }

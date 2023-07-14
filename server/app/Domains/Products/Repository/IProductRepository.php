@@ -14,6 +14,7 @@ interface IProductRepository {
         string $productCategory
     );
     public function getById(int $id);
+    public function getByQuery(string $query);
     public function store(array $request = array(), int $userId);
     public function update(array $request = array(), int $id);
     public function increaseStock(int $id, int $amount);

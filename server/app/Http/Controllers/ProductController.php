@@ -25,6 +25,12 @@ class ProductController extends Controller
         return $this->productService->getById($id);
     }
 
+    public function getByQuery(Request $request)
+    {
+        $query = $request->query('product_name', '');
+        return $this->productService->getByQuery($query);
+    }
+
     public function store(ProductStoreRequest $request)
     {
         $validatedRequest = $request->validated();

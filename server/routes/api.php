@@ -48,6 +48,7 @@ Route::controller(ProductUnitController::class)->group(function() {
 Route::controller(ProductController::class)->group(function() {
     Route::get('product', 'index');
     Route::get('product/{id}', 'getById');
+    Route::get('products/query', 'getByQuery');
     Route::post('product', 'store');
     Route::put('product/{id}', 'update');
     Route::put('product/increase/{id}', 'increaseStock');
