@@ -19,11 +19,8 @@ export const baseQueryWithReauth: BaseQueryFn<
     FetchBaseQueryError
 > = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions)
-    console.log('status : ' + result.error?.status)
     if (result.error?.status === 401) {
         api.dispatch(logout())
-        console.log('returned')
     }
-    console.log('returneda')
     return result
 }

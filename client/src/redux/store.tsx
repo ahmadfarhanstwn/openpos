@@ -6,6 +6,7 @@ import productReducer from '../redux/features/productSlice'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist';
 import { productApi } from './api/productApi';
+import { cashierApi } from './api/cashierApi';
 
 const persistConfig = {
     key: 'root',
@@ -18,11 +19,12 @@ export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
         [productApi.reducerPath]: productApi.reducer,
+        [cashierApi.reducerPath]: cashierApi.reducer,
         userState: persisteUserReducer,
         productState: productReducer
     },
     devTools: process.env.NODE_ENV === 'development',
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware({}).concat([authApi.middleware, productApi.middleware])
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({}).concat([authApi.middleware, productApi.middleware, cashierApi.middleware])
 })
 
 export type RootState = ReturnType<typeof store.getState>;

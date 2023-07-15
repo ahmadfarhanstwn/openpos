@@ -50,7 +50,7 @@ class ProductRepository implements IProductRepository
     public function getByQuery(string $query)
     {
         try {
-            return $this->productModel->where('product_name', 'like', '%a%')->take(5)->get();
+            return $this->productModel->where('product_name', 'like', '%'.$query.'%')->take(5)->get(['product_id', 'product_name']);
         } catch (ModelNotFoundException $e) {
             throw new \Exception('Product not found', Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
