@@ -19,7 +19,7 @@ const InputProductRowCart = () => {
     const [productValue, setProductValue] = useState({
         name: '',
         stock: 0,
-        qty: 1,
+        qty: 0,
         price: 0,
         discount: 0,
         subtotal: 0,
@@ -82,6 +82,22 @@ const InputProductRowCart = () => {
         }
     }
 
+    const handleChangeQty = (e: any) => {
+        let value = Math.max(0, Math.min(productValue.stock, parseInt(e.target.value)));
+        setProductValue({
+            ...productValue,
+            qty: value
+        });
+    }
+
+    const handleChangeDiscount = (e: any) => {
+        const value = Math.max(0, Math.min(100, parseInt(e.target.value)));
+        setProductValue({
+            ...productValue,
+            discount: value
+        });
+    }
+
     return (
         <TableRow hover role="checkbox" tabIndex={-1} key="filters">
             <TableCell key='id'></TableCell>
@@ -121,8 +137,9 @@ const InputProductRowCart = () => {
             </TableCell>
             <TableCell key='product_quantity' align='center'>
                 <input 
-                    id='product-qty-input'
-                    defaultValue={productValue.qty} 
+                    id='product-qty-input' 
+                    value={productValue.qty}
+                    onChange={handleChangeQty}
                     style={{ padding: '.5rem', height: '2rem', width: '3rem', fontSize: '16px', alignContent:'center'}}
                     type='number'
                     onKeyDown={handleQtyInputSubmit}
@@ -137,7 +154,8 @@ const InputProductRowCart = () => {
                     <Typography>%</Typography>
                     <input
                         id='product-discount-input'
-                        defaultValue={productValue.discount}
+                        value={productValue.discount}
+                        onChange={handleChangeDiscount}
                         style={{ padding: '.5rem', height: '2rem', width: '3rem', fontSize: '16px', alignContent:'center'}}
                         type='number'
                         className='hideNumberInputArrows'
