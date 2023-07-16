@@ -1,0 +1,9 @@
+/* styles.css */
+.hideNumberInputArrows::-webkit-inner-spin-button,
+.hideNumberInputArrows::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.hideNumberInputArrows {
+  -moz-appearance: textfield;
+}

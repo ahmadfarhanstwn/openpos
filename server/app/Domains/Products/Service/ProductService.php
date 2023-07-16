@@ -51,7 +51,7 @@ class ProductService
                 'message' => 'Success',
                 'data' => $data
             ], Response::HTTP_OK);
-        } catch(\Exception $e) {
+        } catch(Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
     }

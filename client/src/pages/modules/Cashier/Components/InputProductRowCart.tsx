@@ -1,6 +1,9 @@
-import { Autocomplete, InputAdornment, MenuItem, OutlinedInput, Select, TableCell, TableRow } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { Autocomplete, TableCell, TableRow, Typography } from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
 import { useLazyGetProductSuggestionsQuery } from '../../../../redux/api/cashierApi'
+import '../../../../styles/styles.css'
+import FlexBetween from '../../../../components/FlexBetween'
+import { useLazyGetProductByIdQuery } from '../../../../redux/api/productApi'
 
 interface IProductSuggestionOptions {
     id: number,
@@ -8,8 +11,20 @@ interface IProductSuggestionOptions {
 }
 
 const InputProductRowCart = () => {
+
     const [productQuery, setProductQuery] = useState('')
     const [productSuggestions, setProductSuggestions] = useState<IProductSuggestionOptions[]>([])
+    const [isProductNameSelected, setIsProductNameSelected] = useState<boolean>(false)
+
+    const [productValue, setProductValue] = useState({
+        name: '',
+        stock: 0,
+        qty: 1,
+        price: 0,
+        discount: 0,
+        subtotal: 0,
+        unitName: ''
+    });
 
     // fetch API
     const [getProductSuggestions, productSuggestionsResponse] = useLazyGetProductSuggestionsQuery()
@@ -19,7 +34,6 @@ const InputProductRowCart = () => {
     }, [productQuery, getProductSuggestions])
 
     useEffect(() => {
-        console.log(productSuggestionsResponse)
         if(productSuggestionsResponse.isSuccess) {
             const newOptions : IProductSuggestionOptions[] = productSuggestionsResponse.data?.data.map((row) => ({
                 id: row.product_id,
@@ -31,48 +45,107 @@ const InputProductRowCart = () => {
     }, 
     [productSuggestionsResponse])
 
+    const [getProductById, productByIdResponse] = useLazyGetProductByIdQuery()
+
+    const handleProductSuggestionChange = useCallback((event, value: any) => {
+        setProductValue({
+            ...productValue,
+            name: value.label
+        });
+        setIsProductNameSelected(true)
+        getProductById({product_id: value.id})
+
+        const productQtyInput = document.getElementById('product-qty-input');
+        if (productQtyInput) {
+            productQtyInput.focus();
+        }
+    }, [setProductValue, setIsProductNameSelected, getProductById])
+
+    useEffect(() => {
+        if (productByIdResponse.isSuccess) {
+            setProductValue({
+                ...productValue,
+                stock: productByIdResponse.data.data?.unit_in_stock,
+                unitName: productByIdResponse.data.data?.unit_name || '',
+                price: productByIdResponse.data.data?.product_price,
+                subtotal: productByIdResponse.data.data?.product_price
+            })
+        }
+    }, [productByIdResponse])
+
+    const handleQtyInputSubmit = (e: any) => {
+        if (e.key === 'Enter') {
+            const productDiscountInput = document.getElementById('product-discount-input');
+            if (productDiscountInput) {
+                productDiscountInput.focus();
+            }
+        }
+    }
+
     return (
         <TableRow hover role="checkbox" tabIndex={-1} key="filters">
             <TableCell key='id'></TableCell>
             <TableCell key='product_name'>
-                <Autocomplete
+                {!isProductNameSelected && <Autocomplete
+                    sx={{
+                    display: 'inline-block',
+                    '& input': {
+                        width: 200,
+                        bgcolor: 'background.paper',
+                        color: (theme) =>
+                        theme.palette.getContrastText(theme.palette.background.paper),
+                    },
+                    }}
                     inputValue={productQuery}
                     onInputChange={(event, value) => setProductQuery(value)}
+                    onChange={handleProductSuggestionChange}
                     options={productSuggestions}
                     renderInput={(params) => (
-                        <div ref={params.InputProps.ref}>
-                            <OutlinedInput value={productQuery} size='small' {...params.inputProps} sx={{fontSize: '14px'}} placeholder='Product Name' />
-                        </div>
+                    <div ref={params.InputProps.ref}>
+                        <input 
+                            placeholder='Product Name' 
+                            style={{padding: '1rem', height: '2rem', fontSize: '16px'}} 
+                            type="text" 
+                            {...params.inputProps} 
+                        />
+                    </div>
                     )}
-                />
-                
+                />}
+                {isProductNameSelected && <Typography>{productValue.name}</Typography>}
             </TableCell>
-            <TableCell key='product_stock'>
-                {0}
+            <TableCell key='product_stock' align='center'>
+                {productValue.stock}
             </TableCell>
             <TableCell key='product_unit'>
-            <Select
-                value=""
-                displayEmpty
-                size='small'
-                sx={{fontSize: '14px'}}
-            >
-                <MenuItem value="">
-                    <em></em>
-                </MenuItem>
-            </Select>
+                {productValue.unitName}
             </TableCell>
-            <TableCell key='product_quantity'>
-                <OutlinedInput value={0} sx={{fontSize: '14px'}} size='small' placeholder='Quantity' />
+            <TableCell key='product_quantity' align='center'>
+                <input 
+                    id='product-qty-input'
+                    defaultValue={productValue.qty} 
+                    style={{ padding: '.5rem', height: '2rem', width: '3rem', fontSize: '16px', alignContent:'center'}}
+                    type='number'
+                    onKeyDown={handleQtyInputSubmit}
+                    className='hideNumberInputArrows'
+                />
             </TableCell>
-            <TableCell key='product_price'>
-                <OutlinedInput value={0} sx={{fontSize: '14px'}} size='small' placeholder='Price' />
+            <TableCell key='product_price' align='center'>
+                {productValue.price}
             </TableCell>
-            <TableCell key='product_discount'>
-                <OutlinedInput value={0} startAdornment={<InputAdornment sx={{fontSize: '14px'}} position="start">%</InputAdornment>} sx={{fontSize: '14px'}} size='small' placeholder='Discount' />
+            <TableCell key='product_discount' align='center'>
+                <FlexBetween>
+                    <Typography>%</Typography>
+                    <input
+                        id='product-discount-input'
+                        defaultValue={productValue.discount}
+                        style={{ padding: '.5rem', height: '2rem', width: '3rem', fontSize: '16px', alignContent:'center'}}
+                        type='number'
+                        className='hideNumberInputArrows'
+                    />
+                </FlexBetween>
             </TableCell>
-            <TableCell key='product_subtotal'>
-                {0}
+            <TableCell key='product_subtotal' align='center'>
+                {productValue.subtotal}
             </TableCell>
             <TableCell key='product_actions'></TableCell>
         </TableRow>

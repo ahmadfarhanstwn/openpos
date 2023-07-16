@@ -8,7 +8,8 @@ export interface IProduct {
     product_price: number,
     discount_percentage: number,
     user_id: number,
-    is_deleted: 'Y' | 'N'
+    is_deleted: 'Y' | 'N',
+    unit_name?: string
 }
 
 export interface IProductTransformed {

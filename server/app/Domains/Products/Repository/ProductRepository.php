@@ -5,6 +5,7 @@ use App\Domains\Products\Repository\IProductRepository;
 use App\Http\Requests\ProductStoreRequest;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductRepository implements IProductRepository
@@ -39,7 +40,11 @@ class ProductRepository implements IProductRepository
     public function getById(int $id)
     {
         try {
-            return $this->productModel->findOrFail($id);
+            return DB::table('products')
+                ->join('product_units', 'products.unit_id', '=', 'product_units.unit_id')
+                ->select('products.*', 'product_units.unit_name as unit_name')
+                ->where('product_id', '=', $id)
+                ->first();
         } catch (ModelNotFoundException $e) {
             throw new \Exception('Product not found', Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
@@ -50,7 +55,11 @@ class ProductRepository implements IProductRepository
     public function getByQuery(string $query)
     {
         try {
-            return $this->productModel->where('product_name', 'like', '%'.$query.'%')->take(5)->get(['product_id', 'product_name']);
+            return $this->productModel
+                ->where('product_name', 'like', '%'.$query.'%')
+                ->where('is_deleted', '=', 'N')
+                ->take(5)
+                ->get(['product_id', 'product_name']);
         } catch (ModelNotFoundException $e) {
             throw new \Exception('Product not found', Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
