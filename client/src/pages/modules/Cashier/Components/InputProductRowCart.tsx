@@ -83,18 +83,26 @@ const InputProductRowCart = () => {
     }
 
     const handleChangeQty = (e: any) => {
-        let value = Math.max(0, Math.min(productValue.stock, parseInt(e.target.value)));
+        const newQty = Math.max(0, Math.min(productValue.stock, parseInt(e.target.value))); 
+        const price = productValue.price
+        const discount = productValue.discount
+        const subtotal = price * newQty
         setProductValue({
             ...productValue,
-            qty: value
+            qty: newQty,
+            subtotal: subtotal - (subtotal * (discount / 100))
         });
     }
 
     const handleChangeDiscount = (e: any) => {
-        const value = Math.max(0, Math.min(100, parseInt(e.target.value)));
+        const newDiscount = Math.max(0, Math.min(100, Number(e.target.value)));
+        const price = productValue.price
+        const qty = productValue.qty
+        const subtotal = price * qty
         setProductValue({
             ...productValue,
-            discount: value
+            discount: newDiscount,
+            subtotal: subtotal - (subtotal * (newDiscount / 100))
         });
     }
 
