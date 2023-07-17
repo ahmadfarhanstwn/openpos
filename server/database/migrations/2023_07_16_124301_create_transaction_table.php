@@ -21,12 +21,12 @@ return new class extends Migration
             $table->enum('status', ['draft', 'paid', 'credit', 'cancelled'])->default('draft');
             $table->string('bank_account_name', 50)->nullable();
             $table->string('bank_account_number', 25)->nullable();
-            $table->float('subtotal_products');
             $table->float('discount_total')->default(0);
             $table->float('additional_costs')->default(0);
             $table->float('delivery_costs')->default(0);
             $table->float('grandtotal')->default(0);
-            $table->float('amount_paid')->default(0);
+            $table->float('paid_amount')->default(0);
+            $table->float('change_amount')->default(0);
             $table->integer('user_id');
             $table->timestamps();
         });
