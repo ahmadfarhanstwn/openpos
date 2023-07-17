@@ -17,8 +17,6 @@ return new class extends Migration
             $table->id('transaction_detail_id');
             $table->integer('transaction_id');
             $table->integer('product_id');
-            $table->integer('product_name');
-            $table->integer('unit_id');
             $table->integer('quantity');
             $table->float('discount');
             $table->float('subtotal');

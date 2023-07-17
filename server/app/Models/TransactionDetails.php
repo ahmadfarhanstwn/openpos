@@ -16,9 +16,7 @@ class TransactionDetails extends Model
 
     protected $fillable = [
         'transaction_id',	
-        'product_id',	
-        'product_name',
-        'unit_id',	
+        'product_id',
         'quantity',	
         'discount',	
         'subtotal',
@@ -27,5 +25,10 @@ class TransactionDetails extends Model
     public function transaction() : BelongsTo
     {
         return $this->belongsTo(Transactions::class, 'transaction_id', 'transaction_id');
+    }
+
+    public function product() : BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
     }
 }

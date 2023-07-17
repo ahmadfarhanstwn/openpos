@@ -17,12 +17,12 @@ class Transactions extends Model
         'status',
         'bank_account_name',
         'bank_account_number',
-        'subtotal_products',
         'discount_total',
         'additional_costs',	
         'delivery_costs',
         'grandtotal',
-        'amount_paid',
+        'paid_amount',
+        'change_amount',
         'user_id'
     ];
 
