@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Domains\Transactions\Services;
+
+use App\Domains\Transactions\Dtos\CreateTransactionDto;
+use App\Domains\Transactions\Dtos\TransactionDtoResponse;
+use App\Domains\Transactions\Repository\TransactionRepositoryInterface;
+
+class TransactionService
+{
+    public function __construct(private TransactionRepositoryInterface $transactionRepository)
+    {}
+
+    public function addProduct(CreateTransactionDto $data, int $transactionid, int $userId) : TransactionDtoResponse
+    {
+        return $this->transactionRepository->addProduct($data, $transactionid, $userId);
+    }
+
+    public function getDetails(int $transactionId)
+    {
+        
+    }
+
+    public function delete(int $transactionId, int $transactionDetailId)
+    {
+
+    }
+
+    public function pay(int $transactionId, array $data)
+    {
+
+    }
+
+    public function cancel(int $transactionId)
+    {
+
+    }
+}

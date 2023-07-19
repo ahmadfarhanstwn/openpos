@@ -2,7 +2,11 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -43,8 +47,13 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (Exception $e, Request $request) {
+            if ($request->is('api/*')) {
+                error_log('status code = '.$e->getCode());
+                return response()->json([
+                    'message' => $e->getMessage()
+                ], $e->getCode() == 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $e->getCode());
+            }
         });
     }
 }
