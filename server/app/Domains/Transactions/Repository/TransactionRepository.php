@@ -10,6 +10,7 @@ use App\Models\Transactions;
 use Illuminate\Http\Response;
 use App\Domains\Transactions\Repository\TransactionRepositoryInterface;
 use Exception;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
@@ -18,11 +19,11 @@ class TransactionRepository implements TransactionRepositoryInterface
         $product = Product::where('product_id', '=', $data->productId)->first();
 
         if($product->is_deleted == 'Y') {
-            throw new Exception('Product is already deleted', Response::HTTP_BAD_REQUEST);
+            throw new BadRequestException('Product is already deleted', Response::HTTP_BAD_REQUEST);
         }
 
         if ($product->unit_in_stock < $data->quantity) {
-            throw new Exception('Quantity is less than stock', Response::HTTP_BAD_REQUEST);
+            throw new BadRequestException('Quantity is less than stock', Response::HTTP_BAD_REQUEST);
         }
 
         if($transactionId == 0) {

@@ -6,8 +6,11 @@ use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Throwable;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class Handler extends ExceptionHandler
 {
@@ -47,13 +50,22 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->renderable(function (Exception $e, Request $request) {
-            if ($request->is('api/*')) {
-                error_log('status code = '.$e->getCode());
-                return response()->json([
-                    'message' => $e->getMessage()
-                ], $e->getCode() == 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $e->getCode());
-            }
+        $this->renderable(function(TokenInvalidException $e, Request $request){
+            return response()->json(['message'=>'Invalid token'],Response::HTTP_UNAUTHORIZED);
+        });
+
+        $this->renderable(function (TokenExpiredException $e, Request $request) {
+            return response()->json(['error'=>'Token has Expired'],Response::HTTP_UNAUTHORIZED);
+        });
+
+        $this->renderable(function (JWTException $e, Request $request) {
+            return response()->json(['error'=>'Token not parsed'],Response::HTTP_UNAUTHORIZED);
+        });
+
+        $this->renderable(function (BadRequestException $e, Request $request) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], $e->getCode() == 0 ? Response::HTTP_BAD_REQUEST : $e->getCode());
         });
     }
 }
