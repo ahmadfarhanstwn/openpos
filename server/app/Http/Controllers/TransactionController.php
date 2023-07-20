@@ -33,6 +33,13 @@ class TransactionController extends Controller
         return response()->json($responseData, Response::HTTP_CREATED);
     }
 
+    public function getDetails(int $transactionId)
+    {
+        $responseData = $this->transactionService->getDetails($transactionId);
+
+        return response()->json($responseData, Response::HTTP_OK);
+    }
+
     public function saveDraft()
     {
 

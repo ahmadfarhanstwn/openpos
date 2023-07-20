@@ -8,5 +8,5 @@ use App\Domains\Transactions\Dtos\TransactionDtoResponse;
 interface TransactionRepositoryInterface
 {
     public function addProduct(CreateTransactionDto $data, int $transactionId, int $userId): TransactionDtoResponse;
-    // public function 
+    public function getDetails(int $transactionId) : array;
 }

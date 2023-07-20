@@ -18,7 +18,7 @@ class TransactionService
 
     public function getDetails(int $transactionId)
     {
-        
+        return $this->transactionRepository->getDetails($transactionId);
     }
 
     public function delete(int $transactionId, int $transactionDetailId)

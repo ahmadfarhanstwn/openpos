@@ -9,7 +9,7 @@ use App\Models\TransactionDetails;
 use App\Models\Transactions;
 use Illuminate\Http\Response;
 use App\Domains\Transactions\Repository\TransactionRepositoryInterface;
-use Exception;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class TransactionRepository implements TransactionRepositoryInterface
@@ -48,5 +48,23 @@ class TransactionRepository implements TransactionRepositoryInterface
             $transactionDetailsData->discount,
             $transactionDetailsData->subtotal
         );
+    }
+
+    public function getDetails(int $transactionId) : array {
+        return DB::table('transaction_details')
+                    ->join('products', 'transaction_details.product_id', '=', 'products.product_id')
+                    ->join('product_units', 'products.unit_id', 'product_units.unit_id')
+                    ->where('transaction_details.transaction_id', '=', $transactionId)
+                    ->select(
+                        'transaction_details.transaction_detail_id',
+                        'transaction_details.transaction_id',
+                        'transaction_details.product_id',
+                        'transaction_details.quantity',
+                        'transaction_details.discount',
+                        'transaction_details.subtotal',
+                        'products.product_name', 
+                        'product_units.unit_name')
+                    ->get()
+                    ->toArray();
     }
 }
