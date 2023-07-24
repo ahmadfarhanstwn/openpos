@@ -2,6 +2,7 @@ import FlexBetween from '../../../../components/FlexBetween'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { ITableColumn } from '../../../../types/ITableColumn';
 import InputProductRowCart from './InputProductRowCart';
+import TransactionDetailsRow from './TransactionDetailsRow';
 
 const TableProductCart = () => {
     const columns: ITableColumn[] = [
@@ -35,7 +36,8 @@ const TableProductCart = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    <InputProductRowCart />
+                        <InputProductRowCart />
+                        <TransactionDetailsRow />
                     </TableBody>
                 </Table>
             </TableContainer> 

@@ -30,14 +30,18 @@ class TransactionController extends Controller
 
         $responseData = $this->transactionService->addProduct($data, $transactionId, $userId);
 
-        return response()->json($responseData, Response::HTTP_CREATED);
+        return response()->json([
+            'data' => $responseData
+        ], Response::HTTP_CREATED);
     }
 
     public function getDetails(int $transactionId)
     {
         $responseData = $this->transactionService->getDetails($transactionId);
 
-        return response()->json($responseData, Response::HTTP_OK);
+        return response()->json([
+            'data' => $responseData
+        ], Response::HTTP_OK);
     }
 
     public function saveDraft()

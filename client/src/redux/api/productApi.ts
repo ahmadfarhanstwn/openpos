@@ -24,7 +24,6 @@ export const productApi = createApi({
             async onQueryStarted(args, {dispatch, queryFulfilled}) {
                 try {
                     const { data } = await queryFulfilled;
-                    console.log(data.data.data)
                     dispatch(setProducts(data.data.data))
                     dispatch(setCurrentPageProducts(data.data.current_page))
                     dispatch(setPerPageProducts(data.data.per_page))

@@ -1,30 +1,35 @@
 import { Autocomplete, TableCell, TableRow, Typography } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import { useLazyGetProductSuggestionsQuery } from '../../../../redux/api/cashierApi'
+import { useAddTransactionRowMutation, useLazyGetProductSuggestionsQuery, useLazyGetTransactionDetailRowsQuery } from '../../../../redux/api/cashierApi'
 import '../../../../styles/styles.css'
 import FlexBetween from '../../../../components/FlexBetween'
 import { useLazyGetProductByIdQuery } from '../../../../redux/api/productApi'
+import { useAppSelector } from '../../../../redux/store'
 
 interface IProductSuggestionOptions {
     id: number,
     label: string
 }
 
+const initialProductValue = {
+    name: '',
+    product_id: 0,
+    stock: 0,
+    qty: 0,
+    price: 0,
+    discount: 0,
+    subtotal: 0,
+    unitName: ''
+}
+
 const InputProductRowCart = () => {
+    const transactionId = useAppSelector((state) => state.transactionState.transactionId)
 
     const [productQuery, setProductQuery] = useState('')
     const [productSuggestions, setProductSuggestions] = useState<IProductSuggestionOptions[]>([])
     const [isProductNameSelected, setIsProductNameSelected] = useState<boolean>(false)
 
-    const [productValue, setProductValue] = useState({
-        name: '',
-        stock: 0,
-        qty: 0,
-        price: 0,
-        discount: 0,
-        subtotal: 0,
-        unitName: ''
-    });
+    const [productValue, setProductValue] = useState(initialProductValue);
 
     // fetch API
     const [getProductSuggestions, productSuggestionsResponse] = useLazyGetProductSuggestionsQuery()
@@ -50,7 +55,8 @@ const InputProductRowCart = () => {
     const handleProductSuggestionChange = useCallback((event, value: any) => {
         setProductValue({
             ...productValue,
-            name: value.label
+            name: value.label,
+            product_id: value.id,
         });
         setIsProductNameSelected(true)
         getProductById({product_id: value.id})
@@ -106,9 +112,46 @@ const InputProductRowCart = () => {
         });
     }
 
+    const [addTransaction, { isSuccess, isError, error }] = useAddTransactionRowMutation()
+    const [getTransactionDetails] = useLazyGetTransactionDetailRowsQuery()
+
+    const handleSubmitRow = async (e: any) => {
+        if (e.key === 'Enter') {
+            try {
+                await addTransaction({
+                    transaction_id: transactionId,
+                    product_id: productValue.product_id,
+                    quantity: productValue.qty,
+                    discount: productValue.discount,
+                    subtotal: productValue.subtotal,
+                });
+
+                setProductValue(initialProductValue)
+                setIsProductNameSelected(false)
+
+                const productDiscountInput = document.getElementById('product-discount-input');
+                if (productDiscountInput) {
+                    productDiscountInput.blur()
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (isSuccess) {
+            getTransactionDetails({transaction_id: transactionId})
+        }
+    
+        if (isError) {
+          console.log(error);
+        }
+      }, [isSuccess, isError, transactionId, error]);
+
     return (
         <TableRow hover role="checkbox" tabIndex={-1} key="filters">
-            <TableCell key='id'></TableCell>
+            <TableCell key='no'></TableCell>
             <TableCell key='product_name'>
                 {!isProductNameSelected && <Autocomplete
                     sx={{
@@ -166,6 +209,7 @@ const InputProductRowCart = () => {
                         onChange={handleChangeDiscount}
                         style={{ padding: '.5rem', height: '2rem', width: '3rem', fontSize: '16px', alignContent:'center'}}
                         type='number'
+                        onKeyDown={handleSubmitRow}
                         className='hideNumberInputArrows'
                     />
                 </FlexBetween>

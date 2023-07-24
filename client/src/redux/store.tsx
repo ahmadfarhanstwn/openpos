@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { authApi } from './api/authApi';
 import userReducer from '../redux/features/userSlice'
 import productReducer from '../redux/features/productSlice'
+import transactionReducer from '../redux/features/transactionSlice'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist';
 import { productApi } from './api/productApi';
@@ -13,15 +14,16 @@ const persistConfig = {
     storage,
 }
 
-const persisteUserReducer = persistReducer(persistConfig, userReducer)
+const persistedUserReducer = persistReducer(persistConfig, userReducer)
 
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
         [productApi.reducerPath]: productApi.reducer,
         [cashierApi.reducerPath]: cashierApi.reducer,
-        userState: persisteUserReducer,
-        productState: productReducer
+        userState: persistedUserReducer,
+        productState: productReducer,
+        transactionState: transactionReducer
     },
     devTools: process.env.NODE_ENV === 'development',
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({}).concat([authApi.middleware, productApi.middleware, cashierApi.middleware])

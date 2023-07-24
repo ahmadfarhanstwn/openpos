@@ -63,7 +63,10 @@ class TransactionRepository implements TransactionRepositoryInterface
                         'transaction_details.discount',
                         'transaction_details.subtotal',
                         'products.product_name', 
-                        'product_units.unit_name')
+                        'products.unit_in_stock',
+                        'products.product_price',
+                        'product_units.unit_name',
+                        )
                     ->get()
                     ->toArray();
     }

@@ -25,7 +25,7 @@ class AddTransactionStoreRequest extends FormRequest
     {
         return [
             'product_id' => 'required|numeric',
-            'quantity' => 'required|numeric|gt:1',
+            'quantity' => 'required|numeric|gte:1',
             'discount' => 'required|numeric|gte:0',
             'subtotal' => 'required|numeric|gte:0',
         ];
