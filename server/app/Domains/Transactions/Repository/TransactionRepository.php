@@ -26,27 +26,48 @@ class TransactionRepository implements TransactionRepositoryInterface
             throw new BadRequestException('Quantity is less than stock', Response::HTTP_BAD_REQUEST);
         }
 
-        if($transactionId == 0) {
-            $transactionData = Transactions::create([
-                'user_id' => $userId
+        $transactionDetail = TransactionDetails
+                    ::where('transaction_id', '=', $transactionId)
+                    ->where('product_id', '=', $data->productId)
+                    ->first();
+
+        if ($transactionDetail === null) {
+            if($transactionId == 0) {
+                $transactionData = Transactions::create([
+                    'user_id' => $userId
+                ]);
+                $transactionId = $transactionData->transaction_id;
+            }
+    
+            $transactionDetailsData = TransactionDetails::create([
+                'transaction_id' => $transactionId,	
+                'product_id' => $data->productId,
+                'quantity' => $data->quantity,	
+                'discount' => $data->discount,
+                'subtotal' => $data->subtotal
             ]);
-            $transactionId = $transactionData->transaction_id;
+
+            return new TransactionDtoResponse(
+                $transactionDetailsData->transaction_id,
+                $transactionDetailsData->product_id,
+                $transactionDetailsData->quantity,
+                $transactionDetailsData->discount,
+                $transactionDetailsData->subtotal
+            );
         }
 
-        $transactionDetailsData = TransactionDetails::create([
-            'transaction_id' => $transactionId,	
-            'product_id' => $data->productId,
-            'quantity' => $data->quantity,	
-            'discount' => $data->discount,
-            'subtotal' => $data->subtotal
+        $transactionDetail->update([
+            'quantity' => $transactionDetail->quantity + $data->quantity,	
+            'discount' => $transactionDetail->discount + $data->discount,
+            'subtotal' => $transactionDetail->subtotal + $data->subtotal
         ]);
 
         return new TransactionDtoResponse(
-            $transactionDetailsData->transaction_id,
-            $transactionDetailsData->product_id,
-            $transactionDetailsData->quantity,
-            $transactionDetailsData->discount,
-            $transactionDetailsData->subtotal
+            $transactionDetail->transaction_id,
+            $transactionDetail->product_id,
+            $transactionDetail->quantity,
+            $transactionDetail->discount,
+            $transactionDetail->subtotal
         );
     }
 
