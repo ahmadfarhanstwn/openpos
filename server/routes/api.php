@@ -60,4 +60,5 @@ Route::controller(ProductController::class)->group(function() {
 Route::controller(TransactionController::class)->group(function() {
     Route::post('transaction/{transactionId}', 'addProduct');
     Route::get('transactions/{transactionId}', 'getDetails');
+    Route::delete('transactions/{transactionId}/{transactionDetailId}', 'deleteTransactionDetail');
 });

@@ -44,6 +44,15 @@ class TransactionController extends Controller
         ], Response::HTTP_OK);
     }
 
+    public function deleteTransactionDetail(int $transactionId, int $transactionDetailId)
+    {
+        $responseData = $this->transactionService->deleteTransactionDetail($transactionId, $transactionDetailId);
+
+        return response()->json([
+            'data' => $responseData
+        ], Response::HTTP_OK);
+    }
+
     public function saveDraft()
     {
 

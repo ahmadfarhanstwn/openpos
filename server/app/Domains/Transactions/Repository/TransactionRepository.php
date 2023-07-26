@@ -76,6 +76,7 @@ class TransactionRepository implements TransactionRepositoryInterface
                     ->join('products', 'transaction_details.product_id', '=', 'products.product_id')
                     ->join('product_units', 'products.unit_id', 'product_units.unit_id')
                     ->where('transaction_details.transaction_id', '=', $transactionId)
+                    ->where('transaction_details.is_deleted', '=', 'N')
                     ->select(
                         'transaction_details.transaction_detail_id',
                         'transaction_details.transaction_id',
@@ -90,5 +91,26 @@ class TransactionRepository implements TransactionRepositoryInterface
                         )
                     ->get()
                     ->toArray();
+    }
+
+    public function deleteTransactionDetail(int $transactionId, int $transactionDetailId): TransactionDtoResponse
+    {
+        $transactionDetail = TransactionDetails
+                    ::where('transaction_id', '=', $transactionId)
+                    ->where('transaction_detail_id', '=', $transactionDetailId)
+                    ->first();
+
+        if ($transactionDetail) {
+            $transactionDetail->is_deleted = 'Y';
+            $transactionDetail->save();
+        }
+
+        return new TransactionDtoResponse(
+            $transactionDetail->transaction_id,
+            $transactionDetail->product_id,
+            $transactionDetail->quantity,
+            $transactionDetail->discount,
+            $transactionDetail->subtotal
+        );
     }
 }
