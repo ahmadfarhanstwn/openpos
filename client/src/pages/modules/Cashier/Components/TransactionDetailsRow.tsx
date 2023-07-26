@@ -1,6 +1,7 @@
 import { useAppSelector } from '../../../../redux/store';
 import { TableCell, TableRow, Typography } from '@mui/material';
 import FlexBetween from '../../../../components/FlexBetween';
+import { DeleteTransactionDetail } from './DeleteTransactionDetail';
 
 const TransactionDetailsRow = () => {
     const transactionDetails = useAppSelector((state) => state.transactionState.transactionDetails)
@@ -37,7 +38,11 @@ const TransactionDetailsRow = () => {
                         <Typography>{transactionDetail.subtotal.toString()}</Typography>
                     </TableCell>
                     <TableCell>
-                        {/* Delete action */}
+                        <DeleteTransactionDetail 
+                            transaction_id={transactionDetail.transaction_id} 
+                            transaction_detail_id={transactionDetail.transaction_detail_id}
+                            no={index+1}
+                        />
                     </TableCell>
                 </TableRow>
             ))}

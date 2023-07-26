@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from './baseQueryWithReauth'
-import { IAddTransactionDetailInput, IAddTransactionDetailResponse, IGetProductSuggestionsQuery, IGetProductSuggestionsResponse, IGetTransactionDetailResponse, IGetTransactionDetailRowsQuery } from './Types/cashierTypes'
+import { IAddTransactionDetailInput, IAddTransactionDetailResponse, IDeleteTransactionDetailInput, IGetProductSuggestionsQuery, IGetProductSuggestionsResponse, IGetTransactionDetailResponse, IGetTransactionDetailRowsQuery } from './Types/cashierTypes'
 import { setTransactionDetails, setTransactionId } from '../features/transactionSlice'
 
 export const cashierApi = createApi({
@@ -30,6 +30,8 @@ export const cashierApi = createApi({
                 try {
                     const { data } = await queryFulfilled
                     dispatch(setTransactionDetails(data.data))
+                    // if (data.data.length === 0)
+                    //     dispatch(setTransactionId(0))
                 } catch(err) {
                     console.log(err)
                 }
@@ -58,6 +60,16 @@ export const cashierApi = createApi({
                     console.log(err)
                 }
             },
+        }),
+        deleteTransactionDetail: builder.mutation<IAddTransactionDetailResponse, IDeleteTransactionDetailInput>({
+            query(params) {
+                const { transaction_id, transaction_detail_id} = params
+                return {
+                    url: `transactions/${transaction_id}/${transaction_detail_id}`,
+                    method: 'DELETE',
+                    credentials: 'same-origin'
+                }
+            }
         })
     })
 })
@@ -65,7 +77,8 @@ export const cashierApi = createApi({
 export const {
     useLazyGetProductSuggestionsQuery,
     useLazyGetTransactionDetailRowsQuery,
-    useAddTransactionRowMutation
+    useAddTransactionRowMutation,
+    useDeleteTransactionDetailMutation
 } = cashierApi
 
 // TODO: 

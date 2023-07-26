@@ -52,3 +52,8 @@ export interface IAddTransactionDetailInput {
     discount: number,
     subtotal: number,
 }
+
+export interface IDeleteTransactionDetailInput {
+    transaction_id: number,
+    transaction_detail_id: number,
+}
