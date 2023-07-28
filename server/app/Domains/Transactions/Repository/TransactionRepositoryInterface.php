@@ -12,4 +12,5 @@ interface TransactionRepositoryInterface
     public function getDetails(int $transactionId) : array;
     public function deleteTransactionDetail(int $transactionId, int $transactionDetailId): TransactionDtoResponse;
     public function updateTransactionDetail(UpdateTransactionDetailDto $data, int $transactionId, int $transactionDetailId): TransactionDtoResponse;
+    public function cancelTransaction(int $transactionId): void;
 }

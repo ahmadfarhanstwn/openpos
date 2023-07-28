@@ -32,6 +32,11 @@ class TransactionService
         return $this->transactionRepository->updateTransactionDetail($data, $transactionId, $transactionDetailId);
     }
 
+    public function cancelTransaction(int $transactionId)
+    {
+        return $this->transactionRepository->cancelTransaction($transactionId);
+    }
+
     public function pay(int $transactionId, array $data)
     {
 

@@ -72,6 +72,15 @@ class TransactionController extends Controller
         ], Response::HTTP_OK);
     }
 
+    public function cancelTransaction(int $transactionId)
+    {
+        $this->transactionService->cancelTransaction($transactionId);
+
+        return response()->json([
+            'message' => 'ok'
+        ], Response::HTTP_OK);
+    }
+
     public function saveDraft()
     {
 

@@ -62,4 +62,5 @@ Route::controller(TransactionController::class)->group(function() {
     Route::get('transactions/{transactionId}', 'getDetails');
     Route::delete('transactions/{transactionId}/{transactionDetailId}', 'deleteTransactionDetail');
     Route::put('transactions/{transactionId}/{transactionDetailId}', 'updateTransactionDetail');
+    Route::put('transactions-cancel/{transactionId}', 'cancelTransaction');
 });

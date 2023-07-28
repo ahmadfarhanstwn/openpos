@@ -137,4 +137,16 @@ class TransactionRepository implements TransactionRepositoryInterface
             $transactionDetail->subtotal
         );
     }
+
+    public function cancelTransaction(int $transactionId) : void 
+    {
+        $transaction = Transactions
+                            ::where('transaction_id', '=', $transactionId)
+                            ->first();
+
+        if ($transaction) {
+            $transaction->status = 'cancelled';
+            $transaction->save();
+        }
+    }
 }
