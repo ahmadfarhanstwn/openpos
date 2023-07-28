@@ -30,8 +30,6 @@ export const cashierApi = createApi({
                 try {
                     const { data } = await queryFulfilled
                     dispatch(setTransactionDetails(data.data))
-                    // if (data.data.length === 0)
-                    //     dispatch(setTransactionId(0))
                 } catch(err) {
                     console.log(err)
                 }

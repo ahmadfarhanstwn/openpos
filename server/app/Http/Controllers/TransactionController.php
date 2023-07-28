@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Domains\Transactions\Dtos\CreateTransactionDto;
+use App\Domains\Transactions\Dtos\UpdateTransactionDetailDto;
 use App\Domains\Transactions\Services\TransactionService;
 use App\Http\Requests\AddTransactionStoreRequest;
+use App\Http\Requests\UpdateTransactionDetailRequest;
 use Illuminate\Http\Response;
 
 class TransactionController extends Controller
@@ -47,6 +49,23 @@ class TransactionController extends Controller
     public function deleteTransactionDetail(int $transactionId, int $transactionDetailId)
     {
         $responseData = $this->transactionService->deleteTransactionDetail($transactionId, $transactionDetailId);
+
+        return response()->json([
+            'data' => $responseData
+        ], Response::HTTP_OK);
+    }
+
+    public function updateTransactionDetail(UpdateTransactionDetailRequest $request, int $transactionId, int $transactionDetailId)
+    {
+        $validatedRequest = $request->validated();
+
+        $data = new UpdateTransactionDetailDto(
+            $validatedRequest['quantity'],
+            $validatedRequest['discount'],
+            $validatedRequest['subtotal']
+        );
+
+        $responseData = $this->transactionService->updateTransactionDetail($data, $transactionId, $transactionDetailId);
 
         return response()->json([
             'data' => $responseData

@@ -4,6 +4,7 @@ namespace App\Domains\Transactions\Repository;
 
 use App\Domains\Transactions\Dtos\CreateTransactionDto;
 use App\Domains\Transactions\Dtos\TransactionDtoResponse;
+use App\Domains\Transactions\Dtos\UpdateTransactionDetailDto;
 use App\Models\Product;
 use App\Models\TransactionDetails;
 use App\Models\Transactions;
@@ -102,6 +103,29 @@ class TransactionRepository implements TransactionRepositoryInterface
 
         if ($transactionDetail) {
             $transactionDetail->is_deleted = 'Y';
+            $transactionDetail->save();
+        }
+
+        return new TransactionDtoResponse(
+            $transactionDetail->transaction_id,
+            $transactionDetail->product_id,
+            $transactionDetail->quantity,
+            $transactionDetail->discount,
+            $transactionDetail->subtotal
+        );
+    }
+
+    public function updateTransactionDetail(UpdateTransactionDetailDto $data, int $transactionId, int $transactionDetailId): TransactionDtoResponse
+    {
+        $transactionDetail = TransactionDetails
+                            ::where('transaction_id', '=', $transactionId)
+                            ->where('transaction_detail_id', '=', $transactionDetailId)
+                            ->first();
+
+        if ($transactionDetail) {
+            $transactionDetail->quantity = $data->quantity;
+            $transactionDetail->discount = $data->discount;
+            $transactionDetail->subtotal = $data->subtotal;
             $transactionDetail->save();
         }
 

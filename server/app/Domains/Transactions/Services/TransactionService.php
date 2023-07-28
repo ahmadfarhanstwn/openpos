@@ -4,6 +4,7 @@ namespace App\Domains\Transactions\Services;
 
 use App\Domains\Transactions\Dtos\CreateTransactionDto;
 use App\Domains\Transactions\Dtos\TransactionDtoResponse;
+use App\Domains\Transactions\Dtos\UpdateTransactionDetailDto;
 use App\Domains\Transactions\Repository\TransactionRepositoryInterface;
 
 class TransactionService
@@ -24,6 +25,11 @@ class TransactionService
     public function deleteTransactionDetail(int $transactionId, int $transactionDetailId)
     {
         return $this->transactionRepository->deleteTransactionDetail($transactionId, $transactionDetailId);
+    }
+
+    public function updateTransactionDetail(UpdateTransactionDetailDto $data, int $transactionId, int $transactionDetailId)
+    {
+        return $this->transactionRepository->updateTransactionDetail($data, $transactionId, $transactionDetailId);
     }
 
     public function pay(int $transactionId, array $data)
