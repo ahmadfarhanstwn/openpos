@@ -3,12 +3,14 @@ import { ITransactionDetail } from "../api/Types/cashierTypes"
 
 export interface iTransactionState {
     transactionId : number,
-    transactionDetails: ITransactionDetail[]
+    transactionDetails: ITransactionDetail[],
+    transactionTotalSubtotal: number,
 }
 
 const initialState : iTransactionState = {
     transactionId: 0,
-    transactionDetails: []
+    transactionDetails: [],
+    transactionTotalSubtotal: 0,
 }
 
 export const transactionSlice = createSlice({
@@ -22,9 +24,12 @@ export const transactionSlice = createSlice({
         setTransactionDetails: (state, action: PayloadAction<ITransactionDetail[]>) => {
             state.transactionDetails = action.payload
         },
+        setTransactionTotalSubtotal: (state, action: PayloadAction<number>) => {
+            state.transactionTotalSubtotal = action.payload 
+        }
     }
 })
 
 export default transactionSlice.reducer;
 
-export const { setTransactionId, setTransactionDetails } = transactionSlice.actions
+export const { setTransactionId, setTransactionDetails, setTransactionTotalSubtotal } = transactionSlice.actions

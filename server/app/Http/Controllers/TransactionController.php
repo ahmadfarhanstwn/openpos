@@ -40,9 +40,11 @@ class TransactionController extends Controller
     public function getDetails(int $transactionId)
     {
         $responseData = $this->transactionService->getDetails($transactionId);
+        $totalSubtotal = $this->transactionService->getTotalSubtotal($transactionId);
 
         return response()->json([
-            'data' => $responseData
+            'data' => $responseData,
+            'total_subtotal' => $totalSubtotal
         ], Response::HTTP_OK);
     }
 

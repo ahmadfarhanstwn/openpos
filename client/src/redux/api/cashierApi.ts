@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from './baseQueryWithReauth'
 import { IAddTransactionDetailInput, IAddTransactionDetailResponse, IDeleteTransactionDetailInput, IGetProductSuggestionsQuery, IGetProductSuggestionsResponse, IGetTransactionDetailResponse, IGetTransactionDetailRowsQuery } from './Types/cashierTypes'
-import { setTransactionDetails, setTransactionId } from '../features/transactionSlice'
+import { setTransactionDetails, setTransactionId, setTransactionTotalSubtotal } from '../features/transactionSlice'
 
 export const cashierApi = createApi({
     reducerPath: 'cashierApi',
@@ -30,6 +30,7 @@ export const cashierApi = createApi({
                 try {
                     const { data } = await queryFulfilled
                     dispatch(setTransactionDetails(data.data))
+                    dispatch(setTransactionTotalSubtotal(data.total_subtotal))
                 } catch(err) {
                     console.log(err)
                 }

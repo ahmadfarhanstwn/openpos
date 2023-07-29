@@ -30,7 +30,8 @@ export interface IGetTransactionDetailRowsQuery {
 }
 
 export interface IGetTransactionDetailResponse {
-    data: ITransactionDetail[]
+    data: ITransactionDetail[],
+    total_subtotal: number
 }
 
 export interface IAddTransactionDetail {
