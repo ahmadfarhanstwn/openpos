@@ -46,7 +46,7 @@ const CancelTransactionButton = () => {
                 open={openConfirmationAlertModal} 
                 handleAgree={() => handleCancelTransaction()}
                 handleClose={handleCloseConfirmationAlertModal}
-                title="Delete Product"
+                title="Cancel Transaction"
                 subtitle={`Are you sure you want to cancel this transaction ?`}   
             /> 
         </>

@@ -80,11 +80,4 @@ class TransactionController extends Controller
             'message' => 'ok'
         ], Response::HTTP_OK);
     }
-
-    public function saveDraft()
-    {
-
-    }
-
-
 }

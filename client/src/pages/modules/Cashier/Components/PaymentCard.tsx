@@ -2,6 +2,7 @@ import { Box, Button, Card, CardContent, OutlinedInput, Typography, useTheme } f
 import React from 'react'
 import FlexBetween from '../../../../components/FlexBetween'
 import CancelTransactionButton from './CancelTransactionButton'
+import DraftTransactionButton from './DraftTransactionButton'
 
 const PaymentCard = () => {
     const theme = useTheme()
@@ -31,9 +32,7 @@ const PaymentCard = () => {
                 </FlexBetween>
                 <FlexBetween sx={{marginTop: '2rem'}}>
                     <CancelTransactionButton />
-                    <Button sx={{marginRight: '1rem', height: '70%', fontSize: '16px', width: '50%'}} variant='outlined'>
-                        DRAFT
-                    </Button>
+                    <DraftTransactionButton />
                 </FlexBetween>
             </Box>
         </CardContent>
