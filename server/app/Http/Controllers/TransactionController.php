@@ -80,4 +80,13 @@ class TransactionController extends Controller
             'message' => 'ok'
         ], Response::HTTP_OK);
     }
+
+    public function getTotalSubtotal(int $transactionId)
+    {
+        $subtotal = $this->transactionService->getTotalSubtotal($transactionId);
+
+        return response()->json([
+            'total_subtotal' => $subtotal
+        ], Response::HTTP_OK);
+    }
 }

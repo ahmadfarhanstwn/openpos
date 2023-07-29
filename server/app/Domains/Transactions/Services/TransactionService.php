@@ -37,12 +37,12 @@ class TransactionService
         return $this->transactionRepository->cancelTransaction($transactionId);
     }
 
-    public function pay(int $transactionId, array $data)
+    public function getTotalSubtotal(int $transactionId)
     {
-
+        return $this->transactionRepository->getTotalSubtotal($transactionId);
     }
 
-    public function cancel(int $transactionId)
+    public function pay(int $transactionId, array $data)
     {
 
     }

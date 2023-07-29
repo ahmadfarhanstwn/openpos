@@ -13,4 +13,5 @@ interface TransactionRepositoryInterface
     public function deleteTransactionDetail(int $transactionId, int $transactionDetailId): TransactionDtoResponse;
     public function updateTransactionDetail(UpdateTransactionDetailDto $data, int $transactionId, int $transactionDetailId): TransactionDtoResponse;
     public function cancelTransaction(int $transactionId): void;
+    public function getTotalSubtotal(int $transactionId): float;
 }

@@ -149,4 +149,12 @@ class TransactionRepository implements TransactionRepositoryInterface
             $transaction->save();
         }
     }
+
+    public function getTotalSubtotal(int $transactionId) : float
+    {
+        return TransactionDetails
+                ::where('transaction_id', '=', $transactionId)
+                ->where('is_deleted', '=', 'N')
+                ->sum('subtotal');
+    }
 }
