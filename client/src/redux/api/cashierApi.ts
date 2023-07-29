@@ -68,6 +68,15 @@ export const cashierApi = createApi({
                     credentials: 'same-origin'
                 }
             }
+        }),
+        cancelTransaction: builder.mutation<any, number>({
+            query(transaction_id) {
+                return {
+                    url: `transactions-cancel/${transaction_id}`,
+                    method: 'PUT',
+                    credentials: 'same-origin'
+                }
+            }
         })
     })
 })
@@ -76,7 +85,8 @@ export const {
     useLazyGetProductSuggestionsQuery,
     useLazyGetTransactionDetailRowsQuery,
     useAddTransactionRowMutation,
-    useDeleteTransactionDetailMutation
+    useDeleteTransactionDetailMutation,
+    useCancelTransactionMutation
 } = cashierApi
 
 // TODO: 
