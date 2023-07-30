@@ -1,6 +1,6 @@
 import { Box, Typography, useTheme } from '@mui/material'
 import ProductCart from './Components/ProductCart'
-import PaymentCard from './Components/PaymentCard'
+import TransactionDetailCard from './Components/TransactionDetailCard'
 
 const CashierPage = () => {
     const theme = useTheme()
@@ -12,7 +12,7 @@ const CashierPage = () => {
             </Typography>
             <Box p={1} flexGrow={2} display='flex' flexDirection='row'>
                 <ProductCart />
-                <PaymentCard />
+                <TransactionDetailCard />
             </Box>
         </Box>
     )

@@ -1,12 +1,13 @@
-import { Box, Card, CardContent, OutlinedInput, Typography, useTheme } from '@mui/material'
+import { Box, Card, CardContent, Typography, useTheme } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import FlexBetween from '../../../../components/FlexBetween'
 import CancelTransactionButton from './CancelTransactionButton'
 import DraftTransactionButton from './DraftTransactionButton'
 import { useAppSelector } from '../../../../redux/store'
 import '../../../../styles/styles.css'
+import PaymentTypeOptions from './PaymentTypeOptions'
 
-const PaymentCard = () => {
+const TransactionDetailCard = () => {
     const theme = useTheme()
 
     const transactionTotalSubtotal = useAppSelector((state) => state.transactionState.transactionTotalSubtotal)
@@ -103,6 +104,7 @@ const PaymentCard = () => {
                             className='hideNumberInputArrows'
                         />
                     </FlexBetween>
+                    <PaymentTypeOptions />
                     <FlexBetween sx={{marginTop: '2rem'}}>
                         <CancelTransactionButton />
                         <DraftTransactionButton />
@@ -113,4 +115,4 @@ const PaymentCard = () => {
     )
 }
 
-export default PaymentCard
+export default TransactionDetailCard
