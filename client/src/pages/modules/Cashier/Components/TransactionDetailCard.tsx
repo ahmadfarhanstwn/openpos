@@ -16,6 +16,7 @@ const TransactionDetailCard = () => {
     const [additionalCosts, setAdditionalCosts] = useState<number>(0)
     const [deliveryCost, setDeliveryCost] = useState<number>(0)
     const [grandTotal, setGrandTotal] = useState<number>(transactionTotalSubtotal)
+    const [paymentType, setPaymentType] = useState<string>('cash')
 
     // discount
     const handleChangeDiscount = (e: any) => {
@@ -56,6 +57,11 @@ const TransactionDetailCard = () => {
         const newGrandTotal = transactionTotalSubtotal - discount + additionalCosts + deliveryCost
         setGrandTotal(newGrandTotal)
     }, [transactionTotalSubtotal, discount, additionalCosts, deliveryCost])
+
+    //paymentType
+    const handleChangePaymentType = (paymentTypeId : string) => {
+        setPaymentType(paymentTypeId)
+    } 
 
     return (
         <Card sx={{
@@ -104,7 +110,10 @@ const TransactionDetailCard = () => {
                             className='hideNumberInputArrows'
                         />
                     </FlexBetween>
-                    <PaymentTypeOptions />
+                    <PaymentTypeOptions 
+                        selectedPaymentType={paymentType} 
+                        handleClick={handleChangePaymentType}
+                    />
                     <FlexBetween sx={{marginTop: '2rem'}}>
                         <CancelTransactionButton />
                         <DraftTransactionButton />

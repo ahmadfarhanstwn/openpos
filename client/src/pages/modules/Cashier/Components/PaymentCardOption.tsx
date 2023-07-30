@@ -8,7 +8,7 @@ interface IPaymentCardOptionProps {
     id : string,
     selectedId: string,
     icon: React.ReactElement<SvgIconProps>,
-    handleClick: () => void
+    handleClick: (paymentTypeId: string) => void
 }
 
 const PaymentCardOption: React.FC<IPaymentCardOptionProps> = (
@@ -25,7 +25,7 @@ const PaymentCardOption: React.FC<IPaymentCardOptionProps> = (
         style={{border: selectedId == id ? '1px solid green' : ''}} 
         variant='outlined' 
         sx={{height: "2.5rem"}}>
-        <CardActionArea onClick={handleClick}>
+        <CardActionArea onClick={() => handleClick(id)}>
             <CardContent sx={{padding: '.2rem'}}>
                 <FlexBetween>
                     <FlexBetween sx={{paddingTop: '.1rem'}}>
